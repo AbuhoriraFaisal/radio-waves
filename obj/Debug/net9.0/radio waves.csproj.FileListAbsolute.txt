@@ -975,7 +975,6 @@ C:\Users\Abuhorira.Faisal\Downloads\Projects\Radiolagy\radio waves\radio waves\o
 C:\Users\Abuhorira.Faisal\Downloads\Projects\Radiolagy\radio waves\radio waves\obj\Debug\net9.0\radio waves.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\Abuhorira.Faisal\Downloads\Projects\Radiolagy\radio waves\radio waves\obj\Debug\net9.0\radio waves.RazorAssemblyInfo.cache
 C:\Users\Abuhorira.Faisal\Downloads\Projects\Radiolagy\radio waves\radio waves\obj\Debug\net9.0\radio waves.RazorAssemblyInfo.cs
-C:\Users\Abuhorira.Faisal\Downloads\Projects\Radiolagy\radio waves\radio waves\obj\Debug\net9.0\radio waves.sourcelink.json
 C:\Users\Abuhorira.Faisal\Downloads\Projects\Radiolagy\radio waves\radio waves\obj\Debug\net9.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
 C:\Users\Abuhorira.Faisal\Downloads\Projects\Radiolagy\radio waves\radio waves\obj\Debug\net9.0\scopedcss\bundle\radio waves.styles.css
 C:\Users\Abuhorira.Faisal\Downloads\Projects\Radiolagy\radio waves\radio waves\obj\Debug\net9.0\scopedcss\projectbundle\radio waves.bundle.scp.css

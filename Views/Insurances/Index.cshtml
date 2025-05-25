@@ -24,6 +24,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.CoverageDetails)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CoveragedPercentage)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -43,9 +46,11 @@
                 @Html.DisplayFor(modelItem => item.CoverageDetails)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                @Html.DisplayFor(modelItem => item.CoveragedPercentage)
+            </td>
+            <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
             </td>
         </tr>
 }

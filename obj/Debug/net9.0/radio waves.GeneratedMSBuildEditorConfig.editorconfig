@@ -32,6 +32,10 @@ build_property.EnableCodeStyleSeverity =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGVidHNcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Abuhorira.Faisal/Downloads/Projects/Radiolagy/radio waves/radio waves/Views/Debts/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGVidHNcRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Abuhorira.Faisal/Downloads/Projects/Radiolagy/radio waves/radio waves/Views/Debts/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGVidHNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
@@ -72,6 +76,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW5zdXJhbmNlc1xEZWxldGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Abuhorira.Faisal/Downloads/Projects/Radiolagy/radio waves/radio waves/Views/Insurances/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW5zdXJhbmNlc1xFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Abuhorira.Faisal/Downloads/Projects/Radiolagy/radio waves/radio waves/Views/Insurances/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW5zdXJhbmNlc1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -86,6 +94,18 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Abuhorira.Faisal/Downloads/Projects/Radiolagy/radio waves/radio waves/Views/PartnerSettlements/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGFydG5lclNldHRsZW1lbnRzXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Abuhorira.Faisal/Downloads/Projects/Radiolagy/radio waves/radio waves/Views/Patients/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGF0aWVudHNcQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Abuhorira.Faisal/Downloads/Projects/Radiolagy/radio waves/radio waves/Views/Patients/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGF0aWVudHNcRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Abuhorira.Faisal/Downloads/Projects/Radiolagy/radio waves/radio waves/Views/Patients/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGF0aWVudHNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Abuhorira.Faisal/Downloads/Projects/Radiolagy/radio waves/radio waves/Views/RadiologyTypes/Create.cshtml]
@@ -126,10 +146,6 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Abuhorira.Faisal/Downloads/Projects/Radiolagy/radio waves/radio waves/Views/Shifts/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hpZnRzXENyZWF0ZS5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/Abuhorira.Faisal/Downloads/Projects/Radiolagy/radio waves/radio waves/Views/Shifts/Delete.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hpZnRzXERlbGV0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Abuhorira.Faisal/Downloads/Projects/Radiolagy/radio waves/radio waves/Views/Shifts/Edit.cshtml]

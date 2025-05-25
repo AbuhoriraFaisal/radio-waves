@@ -16,13 +16,40 @@
                 @Html.DisplayNameFor(model => model.Id)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PatientName)
+                @Html.DisplayNameFor(model => model.PatientId)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.AppointmentDate)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.RadiologyTypeId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TechnicianId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ShiftId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BasePrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsPaid)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsSealed)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CoveredByInsurance)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InsuranceId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TechnicianShare)
             </th>
             <th></th>
         </tr>
@@ -34,13 +61,40 @@
                 @Html.DisplayFor(modelItem => item.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.PatientName)
+                @Html.DisplayFor(modelItem => item.PatientId)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.AppointmentDate)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.RadiologyTypeId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TechnicianId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShiftId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BasePrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsPaid)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsSealed)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CoveredByInsurance)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InsuranceId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TechnicianShare)
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
