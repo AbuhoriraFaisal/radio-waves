@@ -16,7 +16,14 @@
                 @Html.DisplayNameFor(model => model.Id)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Debtor)
+                @Html.DisplayNameFor(model => model.PatientId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReservationId)
+            </th>
+           
+            <th>
+                @Html.DisplayNameFor(model => model.Comments)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Amount)
@@ -37,7 +44,14 @@
                 @Html.DisplayFor(modelItem => item.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Debtor)
+                @Html.DisplayFor(modelItem => item.PatientId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReservationId)
+            </td>
+            
+            <td>
+                @Html.DisplayFor(modelItem => item.Comments)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Amount)

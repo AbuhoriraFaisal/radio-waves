@@ -18,9 +18,11 @@
                 <span asp-validation-for="Id" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PatientName" class="control-label"></label>
-                <input asp-for="PatientName" class="form-control" />
-                <span asp-validation-for="PatientName" class="text-danger"></span>
+                <label asp-for="PatientId" class="control-label"></label>
+                <select asp-for="PatientId" class="form-control" asp-items="ViewBag.Patients">
+                    <option value="">-- Select Patient --</option>
+                </select>
+                <span asp-validation-for="PatientId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="AppointmentDate" class="control-label"></label>
@@ -29,9 +31,63 @@
             </div>
             <div class="form-group">
                 <label asp-for="RadiologyTypeId" class="control-label"></label>
-                <input asp-for="RadiologyTypeId" class="form-control" />
+                <select asp-for="RadiologyTypeId" class="form-control" asp-items="ViewBag.RadiologyTypesSelectList" id="RadiologyTypeId">
+                    <option value="">-- Select Radiology Type --</option>
+                </select>
                 <span asp-validation-for="RadiologyTypeId" class="text-danger"></span>
             </div>
+
+
+            <div class="form-group">
+                <label asp-for="TechnicianId" class="control-label"></label>
+                <select asp-for="TechnicianId" class="form-control" asp-items="ViewBag.Technicians">
+                    <option value="">-- Select Technician --</option>
+                </select>
+                <span asp-validation-for="TechnicianId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ShiftId" class="control-label"></label>
+                <select asp-for="ShiftId" class="form-control" asp-items="ViewBag.ShiftsSelectList" id="ShiftId">
+                    <option value="">-- Select Shift --</option>
+                </select>
+                <span asp-validation-for="ShiftId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="BasePrice" class="control-label"></label>
+                <input asp-for="BasePrice" class="form-control" id="BasePrice" readonly />
+                <span asp-validation-for="BasePrice" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="TotalPrice" class="control-label"></label>
+                <input asp-for="TotalPrice" class="form-control" id="TotalPrice" />
+                <span asp-validation-for="TotalPrice" class="text-danger"></span>
+            </div>
+
+            <div class="form-group form-check">
+                <input class="form-check-input" asp-for="IsSealed" />
+                <label class="form-check-label" asp-for="IsSealed"></label>
+            </div>
+
+            <div class="form-group form-check">
+                <input class="form-check-input" asp-for="CoveredByInsurance" />
+                <label class="form-check-label" asp-for="CoveredByInsurance"></label>
+            </div>
+            <div class="form-group" id="insuranceDropdown" style="display:none;">
+                <label asp-for="InsuranceId" class="control-label"></label>
+                <select asp-for="InsuranceId" class="form-control" asp-items="ViewBag.Insurances" id="InsuranceId">
+                    <option value="">-- Select Insurance --</option>
+                </select>
+                <span asp-validation-for="InsuranceId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TechnicianShare" class="control-label"></label>
+                <input asp-for="TechnicianShare" class="form-control" id="TechnicianShare" readonly />
+                <span asp-validation-for="TechnicianShare" class="text-danger"></span>
+            </div>
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -44,5 +100,81 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        const radiologyTypes = @Html.Raw(Json.Serialize(ViewBag.RadiologyTypesJson));
+        const shifts = @Html.Raw(Json.Serialize(ViewBag.ShiftsJson));
+        const insurances = @Html.Raw(Json.Serialize(ViewBag.InsurancesJson));
+
+        const basePriceInput = document.getElementById("BasePrice");
+        const totalPriceInput = document.getElementById("TotalPrice");
+        const technicianShareInput = document.getElementById("TechnicianShare");
+        const insuranceCheckbox = document.getElementById("CoveredByInsurance");
+        const insuranceDropdown = document.getElementById("insuranceDropdown");
+        const insuranceSelect = document.getElementById("InsuranceId");
+
+                function updateTechnicianShare() {
+            const total = parseFloat(totalPriceInput.value) || 0;
+            const basePrice = parseFloat(basePriceInput.value) || 0;
+            const shiftId = document.getElementById("ShiftId").value;
+            const shift = shifts.find(s => s.id == shiftId);
+
+            if (shift) {
+                // If CoveredByInsurance is checked, use basePrice; else use totalPrice
+                const useBasePrice = insuranceCheckbox.checked;
+                const priceForShare = useBasePrice ? basePrice : total;
+                const share = priceForShare * (shift.technicianPercentage / 100);
+                technicianShareInput.value = share.toFixed(2);
+            } else {
+                technicianShareInput.value = "";
+            }
+        }
+
+
+        document.getElementById("RadiologyTypeId").addEventListener("change", function () {
+            const selected = radiologyTypes.find(r => r.id == this.value);
+            if (selected) {
+                basePriceInput.value = selected.price;
+                totalPriceInput.value = selected.price;
+                updateTechnicianShare();
+            } else {
+                basePriceInput.value = "";
+                totalPriceInput.value = "";
+                technicianShareInput.value = "";
+            }
+        });
+
+        document.getElementById("TotalPrice").addEventListener("input", updateTechnicianShare);
+        document.getElementById("ShiftId").addEventListener("change", updateTechnicianShare);
+
+        insuranceCheckbox.addEventListener("change", function () {
+            insuranceDropdown.style.display = this.checked ? "block" : "none";
+            if (!this.checked) {
+                insuranceSelect.value = "";
+                const basePrice = parseFloat(basePriceInput.value) || 0;
+                totalPriceInput.value = basePrice.toFixed(2);
+                updateTechnicianShare();
+            }
+        });
+
+        insuranceSelect.addEventListener("change", function () {
+            const selected = insurances.find(i => i.id == this.value);
+            const basePrice = parseFloat(basePriceInput.value) || 0;
+
+            if (selected) {
+                const discount = basePrice * (selected.coveragedPercentage / 100);
+                const finalPrice = basePrice - discount;
+                totalPriceInput.value = finalPrice.toFixed(2);
+                updateTechnicianShare();
+            }
+        });
+
+    </script>
 }
+
+
+
+

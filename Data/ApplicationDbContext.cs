@@ -17,6 +17,7 @@ namespace radio_waves.Data
         public DbSet<RadiologyType> RadiologyTypes { get; set; }
         public DbSet<Technician> Technicians { get; set; }
         public DbSet<Shift> Shifts { get; set; }
+        public DbSet<Patient> Patients { get; set; }
         public DbSet<Expenditure> Expenditures { get; set; }
         public DbSet<Debt> Debts { get; set; }
         public DbSet<Insurance> Insurances { get; set; }

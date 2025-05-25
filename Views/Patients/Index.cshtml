@@ -1,4 +1,4 @@
-﻿@model IEnumerable<radio_waves.Models.Shift>
+﻿@model IEnumerable<radio_waves.Models.Patient>
 
 @{
     ViewData["Title"] = "Index";
@@ -16,19 +16,16 @@
                 @Html.DisplayNameFor(model => model.Id)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayNameFor(model => model.FullName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.StartTime)
+                @Html.DisplayNameFor(model => model.Phone)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EndTime)
+                @Html.DisplayNameFor(model => model.HasInsurance)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TechnicianPercentage)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsSpecial)
+                @Html.DisplayNameFor(model => model.InsuranceId)
             </th>
             <th></th>
         </tr>
@@ -40,19 +37,16 @@
                 @Html.DisplayFor(modelItem => item.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                @Html.DisplayFor(modelItem => item.FullName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.StartTime)
+                @Html.DisplayFor(modelItem => item.Phone)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.EndTime)
+                @Html.DisplayFor(modelItem => item.HasInsurance)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TechnicianPercentage)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsSpecial)
+                @Html.DisplayFor(modelItem => item.InsuranceId)
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |

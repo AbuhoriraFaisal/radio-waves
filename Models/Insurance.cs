@@ -6,6 +6,7 @@
         public string Provider { get; set; }
         public string PolicyNumber { get; set; }
         public string CoverageDetails { get; set; }
+        public double CoveragedPercentage { get; set; }
     }
 
 }

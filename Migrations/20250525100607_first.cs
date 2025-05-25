@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace radio_waves.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class first : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -51,22 +51,6 @@ namespace radio_waves.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Debts",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Debtor = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    DueDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsPaid = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Debts", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Expenditures",
                 columns: table => new
                 {
@@ -89,7 +73,8 @@ namespace radio_waves.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Provider = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PolicyNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CoverageDetails = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    CoverageDetails = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CoveragedPercentage = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -112,13 +97,28 @@ namespace radio_waves.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RadiologyTypes",
+                name: "PaymentMethod",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PaymentMethod", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RadiologyTypes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -132,9 +132,10 @@ namespace radio_waves.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StartTime = table.Column<int>(type: "int", nullable: false),
-                    EndTime = table.Column<int>(type: "int", nullable: false),
-                    TechnicianPercentage = table.Column<double>(type: "float", nullable: false)
+                    StartTime = table.Column<TimeSpan>(type: "time", nullable: false),
+                    EndTime = table.Column<TimeSpan>(type: "time", nullable: false),
+                    TechnicianPercentage = table.Column<double>(type: "float", nullable: false),
+                    IsSpecial = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -263,22 +264,132 @@ namespace radio_waves.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Patient",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    HasInsurance = table.Column<bool>(type: "bit", nullable: false),
+                    InsuranceId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Patient", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Patient_Insurances_InsuranceId",
+                        column: x => x.InsuranceId,
+                        principalTable: "Insurances",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Reservations",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PatientName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PatientId = table.Column<int>(type: "int", nullable: false),
                     AppointmentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    RadiologyTypeId = table.Column<int>(type: "int", nullable: false)
+                    RadiologyTypeId = table.Column<int>(type: "int", nullable: false),
+                    TechnicianId = table.Column<int>(type: "int", nullable: false),
+                    ShiftId = table.Column<int>(type: "int", nullable: false),
+                    BasePrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    IsSealed = table.Column<bool>(type: "bit", nullable: false),
+                    CoveredByInsurance = table.Column<bool>(type: "bit", nullable: false),
+                    TechnicianShare = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Reservations", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Reservations_Patient_PatientId",
+                        column: x => x.PatientId,
+                        principalTable: "Patient",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Reservations_RadiologyTypes_RadiologyTypeId",
                         column: x => x.RadiologyTypeId,
                         principalTable: "RadiologyTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Reservations_Shifts_ShiftId",
+                        column: x => x.ShiftId,
+                        principalTable: "Shifts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Reservations_Technicians_TechnicianId",
+                        column: x => x.TechnicianId,
+                        principalTable: "Technicians",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Debts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PatientId = table.Column<int>(type: "int", nullable: true),
+                    ReservationId = table.Column<int>(type: "int", nullable: true),
+                    MobileNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Comments = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    DueDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsPaid = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Debts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Debts_Patient_PatientId",
+                        column: x => x.PatientId,
+                        principalTable: "Patient",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Debts_Reservations_ReservationId",
+                        column: x => x.ReservationId,
+                        principalTable: "Reservations",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Payment",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ReservationId = table.Column<int>(type: "int", nullable: false),
+                    PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    PaymentMethodId = table.Column<int>(type: "int", nullable: false),
+                    IsCoveredByInsurance = table.Column<bool>(type: "bit", nullable: false),
+                    PatientId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Payment", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Payment_Patient_PatientId",
+                        column: x => x.PatientId,
+                        principalTable: "Patient",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Payment_PaymentMethod_PaymentMethodId",
+                        column: x => x.PaymentMethodId,
+                        principalTable: "PaymentMethod",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Payment_Reservations_ReservationId",
+                        column: x => x.ReservationId,
+                        principalTable: "Reservations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -323,9 +434,54 @@ namespace radio_waves.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Debts_PatientId",
+                table: "Debts",
+                column: "PatientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Debts_ReservationId",
+                table: "Debts",
+                column: "ReservationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Patient_InsuranceId",
+                table: "Patient",
+                column: "InsuranceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Payment_PatientId",
+                table: "Payment",
+                column: "PatientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Payment_PaymentMethodId",
+                table: "Payment",
+                column: "PaymentMethodId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Payment_ReservationId",
+                table: "Payment",
+                column: "ReservationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reservations_PatientId",
+                table: "Reservations",
+                column: "PatientId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Reservations_RadiologyTypeId",
                 table: "Reservations",
                 column: "RadiologyTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reservations_ShiftId",
+                table: "Reservations",
+                column: "ShiftId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reservations_TechnicianId",
+                table: "Reservations",
+                column: "TechnicianId");
         }
 
         /// <inheritdoc />
@@ -353,19 +509,10 @@ namespace radio_waves.Migrations
                 name: "Expenditures");
 
             migrationBuilder.DropTable(
-                name: "Insurances");
-
-            migrationBuilder.DropTable(
                 name: "PartnerSettlements");
 
             migrationBuilder.DropTable(
-                name: "Reservations");
-
-            migrationBuilder.DropTable(
-                name: "Shifts");
-
-            migrationBuilder.DropTable(
-                name: "Technicians");
+                name: "Payment");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -374,7 +521,25 @@ namespace radio_waves.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
+                name: "PaymentMethod");
+
+            migrationBuilder.DropTable(
+                name: "Reservations");
+
+            migrationBuilder.DropTable(
+                name: "Patient");
+
+            migrationBuilder.DropTable(
                 name: "RadiologyTypes");
+
+            migrationBuilder.DropTable(
+                name: "Shifts");
+
+            migrationBuilder.DropTable(
+                name: "Technicians");
+
+            migrationBuilder.DropTable(
+                name: "Insurances");
         }
     }
 }

@@ -30,6 +30,33 @@ namespace radio_waves.Controllers
             }
             return View(insurance);
         }
+        public async Task<IActionResult> Edit(int id)
+        {
+            var insurance = await _context.Insurances.FindAsync(id);
+            if (insurance == null)
+            {
+                return NotFound();
+            }
+            return View(insurance);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, Insurance insurance)
+        {
+            if (id != insurance.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                _context.Update(insurance);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(insurance);
+        }
 
         public async Task<IActionResult> Delete(int id)
         {
