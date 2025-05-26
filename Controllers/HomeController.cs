@@ -11,6 +11,7 @@ namespace radio_waves.Controllers
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
+            // Test Fo Github issue #1
         }
 
         public IActionResult Index()
