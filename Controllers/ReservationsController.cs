@@ -83,13 +83,52 @@ namespace radio_waves.Controllers
 
             return View(reservation);
         }
+        public async Task<IActionResult> Edit(int id)
+        {
+            var reservation = await _context.Reservations.FindAsync(id);
+            if (reservation == null)
+            {
+                return NotFound();
+            }
+            var radiologyType = await _context.RadiologyTypes.FindAsync(reservation.RadiologyTypeId);
+            var shift = await _context.Shifts.FindAsync(reservation.ShiftId);
+            ViewBag.Patients = new SelectList(_context.Patients, "Id", "FullName", reservation.PatientId);
+            ViewBag.RadiologyTypes = new SelectList(_context.RadiologyTypes, "Id", "Name", reservation.RadiologyTypeId);
+            ViewBag.Technicians = new SelectList(_context.Technicians, "Id", "FullName", reservation.TechnicianId);
+            ViewBag.Shifts = new SelectList(_context.Shifts, "Id", "Name", reservation.ShiftId);
 
+            return View(reservation);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, Reservation reservation)
+        {
+            if (id != reservation.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                _context.Update(reservation);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            var radiologyType = await _context.RadiologyTypes.FindAsync(reservation.RadiologyTypeId);
+            var shift = await _context.Shifts.FindAsync(reservation.ShiftId);
+            ViewBag.Patients = new SelectList(_context.Patients, "Id", "FullName", reservation.PatientId);
+            ViewBag.RadiologyTypes = new SelectList(_context.RadiologyTypes, "Id", "Name", reservation.RadiologyTypeId);
+            ViewBag.Technicians = new SelectList(_context.Technicians, "Id", "FullName", reservation.TechnicianId);
+            ViewBag.Shifts = new SelectList(_context.Shifts, "Id", "Name", reservation.ShiftId);
+            return View(reservation);
+        }
         public async Task<IActionResult> Delete(int id)
         {
             var reservation = await _context.Reservations.FindAsync(id);
             if (reservation == null) return NotFound();
-
-            _context.Reservations.Remove(reservation);
+            reservation.IsCanceled = ! reservation.IsCanceled; // Mark as canceled instead of deleting
+            _context.Reservations.Update(reservation);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

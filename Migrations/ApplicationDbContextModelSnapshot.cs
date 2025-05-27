@@ -461,6 +461,9 @@ namespace radio_waves.Migrations
                     b.Property<int?>("InsuranceId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsCanceled")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsSealed")
                         .HasColumnType("bit");
 

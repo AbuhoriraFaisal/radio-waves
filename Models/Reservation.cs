@@ -25,6 +25,7 @@ namespace radio_waves.Models
         public ICollection<Payment> Payments { get; set; }
 
         public bool IsSealed { get; set; }
+        public bool IsCanceled { get; set; }
         public bool CoveredByInsurance { get; set; }
         public int? InsuranceId { get; set; }
         public decimal TechnicianShare { get; set; } // = TotalPrice * TechnicianPercentage at booking time
