@@ -59,21 +59,28 @@
                 <input asp-for="BasePrice" class="form-control" id="BasePrice" readonly />
                 <span asp-validation-for="BasePrice" class="text-danger"></span>
             </div>
-
+            <div class="form-group form-check">
+                <input class="form-check-input" asp-for="IsDebt" />
+                <label class="form-check-label" asp-for="IsDebt"></label>
+            </div>
+            <div class="form-group form-check">
+                <input class="form-check-input" asp-for="IsCommission" />
+                <label class="form-check-label" asp-for="IsCommission"></label>
+            </div>
             <div class="form-group">
-                <label asp-for="TotalPrice" class="control-label"></label>
-                <input asp-for="TotalPrice" class="form-control" id="TotalPrice" />
-                <span asp-validation-for="TotalPrice" class="text-danger"></span>
+                <label asp-for="PaiedAmount" class="control-label"></label>
+                <input asp-for="PaiedAmount" class="form-control" id="PaiedAmount" />
+                <span asp-validation-for="PaiedAmount" class="text-danger"></span>
             </div>
 
-            <div class="form-group form-check">
+           @*  <div class="form-group form-check">
                 <input class="form-check-input" asp-for="IsSealed" />
                 <label class="form-check-label" asp-for="IsSealed"></label>
             </div>
             <div class="form-group form-check">
                 <input class="form-check-input" asp-for="IsCanceled" />
                 <label class="form-check-label" asp-for="IsCanceled"></label>
-            </div>
+            </div> *@
 
             <div class="form-group form-check">
                 <input class="form-check-input" asp-for="CoveredByInsurance" />
@@ -114,7 +121,7 @@
         const insurances = @Html.Raw(Json.Serialize(ViewBag.InsurancesJson));
 
         const basePriceInput = document.getElementById("BasePrice");
-        const totalPriceInput = document.getElementById("TotalPrice");
+        const totalPriceInput = document.getElementById("PaiedAmount");
         const technicianShareInput = document.getElementById("TechnicianShare");
         const insuranceCheckbox = document.getElementById("CoveredByInsurance");
         const insuranceDropdown = document.getElementById("insuranceDropdown");
@@ -151,7 +158,7 @@
             }
         });
 
-        document.getElementById("TotalPrice").addEventListener("input", updateTechnicianShare);
+        document.getElementById("PaiedAmount").addEventListener("input", updateTechnicianShare);
         document.getElementById("ShiftId").addEventListener("change", updateTechnicianShare);
 
         insuranceCheckbox.addEventListener("change", function () {

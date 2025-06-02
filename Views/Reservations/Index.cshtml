@@ -34,7 +34,13 @@
                 @Html.DisplayNameFor(model => model.BasePrice)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TotalPrice)
+                @Html.DisplayNameFor(model => model.IsDebt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsCommission)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PaiedAmount)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.IsPaid)
@@ -82,7 +88,13 @@
                 @Html.DisplayFor(modelItem => item.BasePrice)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TotalPrice)
+                @Html.DisplayFor(modelItem => item.IsDebt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsCommission)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PaiedAmount)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IsPaid)

@@ -7,6 +7,8 @@
         public Patient Patient { get; set; }
 
         public int? ReservationId { get; set; }
+        public int? TechnicianId { get; set; }
+        public decimal TechnicianShare { get; set; }
         public Reservation Reservation { get; set; }
         public string Comments { get; set; }
         public decimal Amount { get; set; }

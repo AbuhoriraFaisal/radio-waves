@@ -68,12 +68,27 @@ namespace radio_waves.Controllers
             {
                 // Set base price from RadiologyType
                 reservation.BasePrice = radiologyType.Price;
-
-                // Calculate Technician Share
-                reservation.TechnicianShare = reservation.TotalPrice * (decimal)(shift.TechnicianPercentage / 100.0);
-
                 _context.Add(reservation);
                 await _context.SaveChangesAsync();
+                // Calculate Technician Share
+                // reservation.TechnicianShare = reservation.PaiedAmount * (decimal)(shift.TechnicianPercentage / 100.0);
+                if (reservation.IsDebt)
+                {
+                    Debt d = new Debt()
+                    {
+                        PatientId = reservation.PatientId,
+                        ReservationId = reservation.Id,
+                        IsPaid = false,
+                        Amount = reservation.BasePrice - reservation.PaiedAmount,
+                        DueDate = DateTime.Now,
+                        Comments = "test",
+                        TechnicianShare = (reservation.BasePrice - reservation.PaiedAmount) * (decimal)(shift.TechnicianPercentage / 100.0),
+                        TechnicianId = reservation.TechnicianId
+                    };
+                    _context.Add(d);
+                    await _context.SaveChangesAsync();
+                }
+                
                 return RedirectToAction(nameof(Index));
             }
             ViewBag.Patients = new SelectList(_context.Patients, "Id", "FullName", reservation.PatientId);

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace radio_waves.Models
 {
@@ -20,12 +21,15 @@ namespace radio_waves.Models
         public Shift Shift { get; set; }
         public int ShiftId { get; set; }
         public decimal BasePrice { get; set; }
-        public decimal TotalPrice { get; set; }
-        public bool IsPaid => Payments?.Sum(p => p.Amount) >= TotalPrice;
+        
+        public decimal PaiedAmount { get; set; }
+        public bool IsPaid => Payments?.Sum(p => p.Amount) >= PaiedAmount;
         public ICollection<Payment> Payments { get; set; }
 
         public bool IsSealed { get; set; }
         public bool IsCanceled { get; set; }
+        public bool IsDebt { get; set; }
+        public bool IsCommission { get; set; }
         public bool CoveredByInsurance { get; set; }
         public int? InsuranceId { get; set; }
         public decimal TechnicianShare { get; set; } // = TotalPrice * TechnicianPercentage at booking time
