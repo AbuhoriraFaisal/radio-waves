@@ -10,22 +10,22 @@ using radio_waves.Models;
 
 namespace radio_waves.Controllers
 {
-    public class InsurancesController : Controller
+    public class InsuranceCompaniesController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public InsurancesController(ApplicationDbContext context)
+        public InsuranceCompaniesController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Insurances
+        // GET: InsuranceCompanies
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Insurances.ToListAsync());
+            return View(await _context.InsuranceCompanies.ToListAsync());
         }
 
-        // GET: Insurances/Details/5
+        // GET: InsuranceCompanies/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +33,39 @@ namespace radio_waves.Controllers
                 return NotFound();
             }
 
-            var insurance = await _context.Insurances
+            var insuranceCompanies = await _context.InsuranceCompanies
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (insurance == null)
+            if (insuranceCompanies == null)
             {
                 return NotFound();
             }
 
-            return View(insurance);
+            return View(insuranceCompanies);
         }
 
-        // GET: Insurances/Create
+        // GET: InsuranceCompanies/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Insurances/Create
+        // POST: InsuranceCompanies/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ProviderId,PatientId,ReservationId,TechnicianId,TechnicianShare,PaidAmount,InsuranceAmount,PolicyNumber,IsComplete")] Insurance insurance)
+        public async Task<IActionResult> Create([Bind("Id,Provider,PolicyNumber,CoverageDetails,CoveragedPercentage")] InsuranceCompanies insuranceCompanies)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(insurance);
+                _context.Add(insuranceCompanies);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(insurance);
+            return View(insuranceCompanies);
         }
 
-        // GET: Insurances/Edit/5
+        // GET: InsuranceCompanies/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +73,22 @@ namespace radio_waves.Controllers
                 return NotFound();
             }
 
-            var insurance = await _context.Insurances.FindAsync(id);
-            if (insurance == null)
+            var insuranceCompanies = await _context.InsuranceCompanies.FindAsync(id);
+            if (insuranceCompanies == null)
             {
                 return NotFound();
             }
-            return View(insurance);
+            return View(insuranceCompanies);
         }
 
-        // POST: Insurances/Edit/5
+        // POST: InsuranceCompanies/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ProviderId,PatientId,ReservationId,TechnicianId,TechnicianShare,PaidAmount,InsuranceAmount,PolicyNumber,IsComplete")] Insurance insurance)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Provider,PolicyNumber,CoverageDetails,CoveragedPercentage")] InsuranceCompanies insuranceCompanies)
         {
-            if (id != insurance.Id)
+            if (id != insuranceCompanies.Id)
             {
                 return NotFound();
             }
@@ -97,12 +97,12 @@ namespace radio_waves.Controllers
             {
                 try
                 {
-                    _context.Update(insurance);
+                    _context.Update(insuranceCompanies);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!InsuranceExists(insurance.Id))
+                    if (!InsuranceCompaniesExists(insuranceCompanies.Id))
                     {
                         return NotFound();
                     }
@@ -113,20 +113,10 @@ namespace radio_waves.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(insurance);
+            return View(insuranceCompanies);
         }
 
-        public async Task<IActionResult> MarkAsComplete(int id)
-        {
-            var insurance = await _context.Insurances.FindAsync(id);
-            if (insurance == null) return NotFound();
-
-            insurance.IsComplete = !insurance.IsComplete;
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        // GET: Insurances/Delete/5
+        // GET: InsuranceCompanies/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -134,34 +124,34 @@ namespace radio_waves.Controllers
                 return NotFound();
             }
 
-            var insurance = await _context.Insurances
+            var insuranceCompanies = await _context.InsuranceCompanies
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (insurance == null)
+            if (insuranceCompanies == null)
             {
                 return NotFound();
             }
 
-            return View(insurance);
+            return View(insuranceCompanies);
         }
 
-        // POST: Insurances/Delete/5
+        // POST: InsuranceCompanies/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var insurance = await _context.Insurances.FindAsync(id);
-            if (insurance != null)
+            var insuranceCompanies = await _context.InsuranceCompanies.FindAsync(id);
+            if (insuranceCompanies != null)
             {
-                _context.Insurances.Remove(insurance);
+                _context.InsuranceCompanies.Remove(insuranceCompanies);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool InsuranceExists(int id)
+        private bool InsuranceCompaniesExists(int id)
         {
-            return _context.Insurances.Any(e => e.Id == id);
+            return _context.InsuranceCompanies.Any(e => e.Id == id);
         }
     }
 }

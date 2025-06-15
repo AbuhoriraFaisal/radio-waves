@@ -15,7 +15,7 @@ namespace radio_waves.Models
         public ICollection<Payment> Payments { get; set; }
         public int? InsuranceId { get; set; }
         [ValidateNever]  // 
-        public Insurance Insurance { get; set; }
+        public InsuranceCompanies Insurance { get; set; }
         public Patient()
         {
             Reservations = new HashSet<Reservation>();

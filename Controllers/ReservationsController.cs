@@ -36,9 +36,9 @@ namespace radio_waves.Controllers
             ViewBag.Technicians = new SelectList(_context.Technicians, "Id", "FullName");
             ViewBag.RadiologyTypesSelectList = new SelectList(_context.RadiologyTypes, "Id", "Name");
             ViewBag.ShiftsSelectList = new SelectList(_context.Shifts, "Id", "Name", currentShift?.Id);
-            ViewBag.Insurances = new SelectList(_context.Insurances, "Id", "Provider");
+            ViewBag.InsuranceCompanies = new SelectList(_context.InsuranceCompanies, "Id", "Provider");
             
-            ViewBag.InsurancesJson = _context.Insurances
+            ViewBag.InsuranceCompaniesJson = _context.InsuranceCompanies
                 .Select(i => new { i.Id, i.CoveragedPercentage })
                 .ToList();
 
@@ -59,6 +59,8 @@ namespace radio_waves.Controllers
         {
             var radiologyType = await _context.RadiologyTypes.FindAsync(reservation.RadiologyTypeId);
             var shift = await _context.Shifts.FindAsync(reservation.ShiftId);
+            var insurneCompany = await _context.InsuranceCompanies.FindAsync(reservation.InsuranceId);
+
 
             if (radiologyType == null || shift == null)
             {
@@ -85,10 +87,32 @@ namespace radio_waves.Controllers
                         TechnicianShare = (reservation.BasePrice - reservation.PaiedAmount) * (decimal)(shift.TechnicianPercentage / 100.0),
                         TechnicianId = reservation.TechnicianId
                     };
+                    if (reservation.CoveredByInsurance) { 
+                        d.Amount = d.Amount - (decimal)((double) reservation.BasePrice *  insurneCompany.CoveragedPercentage / 100.0);
+                        d.TechnicianShare = d.Amount * (decimal)(shift.TechnicianPercentage / 100.0);
+                    }
                     _context.Add(d);
                     await _context.SaveChangesAsync();
                 }
-                
+
+                if (reservation.CoveredByInsurance)
+                {
+                    Insurance I = new Insurance()
+                    {
+                        PatientId = reservation.PatientId,
+                        ReservationId = reservation.Id,
+                        IsComplete = false,
+                        InsuranceAmount =  (decimal)((double)reservation.BasePrice * insurneCompany.CoveragedPercentage / 100.0),
+                        PaidAmount =  reservation.PaiedAmount,
+                        PolicyNumber = "1234567",
+                        ProviderId = reservation.InsuranceId,
+                        TechnicianShare = (decimal)((double)reservation.BasePrice * insurneCompany.CoveragedPercentage / 100.0) * (decimal)(shift.TechnicianPercentage / 100.0),
+                        TechnicianId = reservation.TechnicianId
+                    };
+                    _context.Add(I);
+                    await _context.SaveChangesAsync();
+                }
+
                 return RedirectToAction(nameof(Index));
             }
             ViewBag.Patients = new SelectList(_context.Patients, "Id", "FullName", reservation.PatientId);

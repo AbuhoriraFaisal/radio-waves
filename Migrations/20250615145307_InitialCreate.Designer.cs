@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using radio_waves.Data;
 
@@ -11,9 +12,11 @@ using radio_waves.Data;
 namespace radio_waves.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250615145307_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -395,13 +398,16 @@ namespace radio_waves.Migrations
                     b.Property<int?>("InsuranceId")
                         .HasColumnType("int");
 
+                    b.Property<int>("InsuranceId1")
+                        .HasColumnType("int");
+
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("InsuranceId");
+                    b.HasIndex("InsuranceId1");
 
                     b.ToTable("Patients");
                 });
@@ -672,9 +678,11 @@ namespace radio_waves.Migrations
 
             modelBuilder.Entity("radio_waves.Models.Patient", b =>
                 {
-                    b.HasOne("radio_waves.Models.InsuranceCompanies", "Insurance")
+                    b.HasOne("radio_waves.Models.Insurance", "Insurance")
                         .WithMany()
-                        .HasForeignKey("InsuranceId");
+                        .HasForeignKey("InsuranceId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Insurance");
                 });

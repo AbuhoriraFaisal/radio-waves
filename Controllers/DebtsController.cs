@@ -75,7 +75,7 @@ namespace radio_waves.Controllers
             var debt = await _context.Debts.FindAsync(id);
             if (debt == null) return NotFound();
 
-            debt.IsPaid = true;
+            debt.IsPaid = !debt.IsPaid;
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

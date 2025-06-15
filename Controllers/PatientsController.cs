@@ -25,7 +25,7 @@ namespace radio_waves.Controllers
 
         public IActionResult Create()
         {
-            ViewBag.Insurances = new SelectList(_context.Insurances, "Id", "Provider");
+            ViewBag.Insurances = new SelectList(_context.InsuranceCompanies, "Id", "Provider");
             return View();
         } 
 

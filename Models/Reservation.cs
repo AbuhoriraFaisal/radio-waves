@@ -33,7 +33,7 @@ namespace radio_waves.Models
         public bool CoveredByInsurance { get; set; }
         public int? InsuranceId { get; set; }
         public decimal TechnicianShare { get; set; } // = TotalPrice * TechnicianPercentage at booking time
-
+        //public string 
         public Reservation()
         {
             Payments = new HashSet<Payment>();

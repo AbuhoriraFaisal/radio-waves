@@ -23,6 +23,7 @@ namespace radio_waves.Data
         public DbSet<Insurance> Insurances { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<PartnerSettlement> PartnerSettlements { get; set; }
+        public DbSet<InsuranceCompanies> InsuranceCompanies { get; set; }
     }
 
 }

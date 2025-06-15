@@ -12,30 +12,50 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            @* <div class="form-group">
-                <label asp-for="Id" class="control-label"></label>
-                <input asp-for="Id" class="form-control" />
-                <span asp-validation-for="Id" class="text-danger"></span>
-            </div> *@
             <div class="form-group">
-                <label asp-for="Provider" class="control-label"></label>
-                <input asp-for="Provider" class="form-control" />
-                <span asp-validation-for="Provider" class="text-danger"></span>
+                <label asp-for="ProviderId" class="control-label"></label>
+                <input asp-for="ProviderId" class="form-control" />
+                <span asp-validation-for="ProviderId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PatientId" class="control-label"></label>
+                <input asp-for="PatientId" class="form-control" />
+                <span asp-validation-for="PatientId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReservationId" class="control-label"></label>
+                <input asp-for="ReservationId" class="form-control" />
+                <span asp-validation-for="ReservationId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TechnicianId" class="control-label"></label>
+                <input asp-for="TechnicianId" class="form-control" />
+                <span asp-validation-for="TechnicianId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TechnicianShare" class="control-label"></label>
+                <input asp-for="TechnicianShare" class="form-control" />
+                <span asp-validation-for="TechnicianShare" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PaidAmount" class="control-label"></label>
+                <input asp-for="PaidAmount" class="form-control" />
+                <span asp-validation-for="PaidAmount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="InsuranceAmount" class="control-label"></label>
+                <input asp-for="InsuranceAmount" class="form-control" />
+                <span asp-validation-for="InsuranceAmount" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="PolicyNumber" class="control-label"></label>
                 <input asp-for="PolicyNumber" class="form-control" />
                 <span asp-validation-for="PolicyNumber" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="CoverageDetails" class="control-label"></label>
-                <input asp-for="CoverageDetails" class="form-control" />
-                <span asp-validation-for="CoverageDetails" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CoveragedPercentage" class="control-label"></label>
-                <input asp-for="CoveragedPercentage" class="form-control" />
-                <span asp-validation-for="CoveragedPercentage" class="text-danger"></span>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsComplete" /> @Html.DisplayNameFor(model => model.IsComplete)
+                </label>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

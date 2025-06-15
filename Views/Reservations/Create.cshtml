@@ -88,7 +88,7 @@
             </div>
             <div class="form-group" id="insuranceDropdown" style="display:none;">
                 <label asp-for="InsuranceId" class="control-label"></label>
-                <select asp-for="InsuranceId" class="form-control" asp-items="ViewBag.Insurances" id="InsuranceId">
+                <select asp-for="InsuranceId" class="form-control" asp-items="ViewBag.InsuranceCompanies" id="InsuranceId">
                     <option value="">-- Select Insurance --</option>
                 </select>
                 <span asp-validation-for="InsuranceId" class="text-danger"></span>
@@ -118,7 +118,7 @@
     <script>
         const radiologyTypes = @Html.Raw(Json.Serialize(ViewBag.RadiologyTypesJson));
         const shifts = @Html.Raw(Json.Serialize(ViewBag.ShiftsJson));
-        const insurances = @Html.Raw(Json.Serialize(ViewBag.InsurancesJson));
+        const insurances = @Html.Raw(Json.Serialize(ViewBag.InsuranceCompaniesJson));
 
         const basePriceInput = document.getElementById("BasePrice");
         const totalPriceInput = document.getElementById("PaiedAmount");
@@ -136,7 +136,8 @@
             if (shift) {
                 // If CoveredByInsurance is checked, use basePrice; else use totalPrice
                 const useBasePrice = insuranceCheckbox.checked;
-                const priceForShare = useBasePrice ? basePrice : total;
+                //const priceForShare = useBasePrice ? basePrice : total;
+                const priceForShare = useBasePrice ? total : total;
                 const share = priceForShare * (shift.technicianPercentage / 100);
                 technicianShareInput.value = share.toFixed(2);
             } else {
