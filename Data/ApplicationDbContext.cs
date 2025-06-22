@@ -24,6 +24,10 @@ namespace radio_waves.Data
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<PartnerSettlement> PartnerSettlements { get; set; }
         public DbSet<InsuranceCompanies> InsuranceCompanies { get; set; }
+        public DbSet<TechnicianSettlement> TechnicianSettlements { get; set; }
+   
+public DbSet<radio_waves.Models.TechnicianSettlementViewModel> TechnicianSettlementViewModel { get; set; } = default!;
+
     }
 
 }

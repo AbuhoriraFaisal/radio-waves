@@ -21,6 +21,7 @@ namespace radio_waves.Models
         public Shift Shift { get; set; }
         public int ShiftId { get; set; }
         public decimal BasePrice { get; set; }
+        public DateTime ReservationDate =DateTime.Now;
         
         public decimal PaiedAmount { get; set; }
         public bool IsPaid => Payments?.Sum(p => p.Amount) >= PaiedAmount;

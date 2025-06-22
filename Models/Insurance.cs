@@ -12,6 +12,7 @@
         public decimal InsuranceAmount { get; set; }
         public string PolicyNumber { get; set; }
         public bool IsComplete { get; set; }
+        public DateTime InsuranceDate = DateTime.Now;
 
     }
 }

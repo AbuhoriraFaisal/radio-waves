@@ -8,7 +8,6 @@ using radio_waves.Models;
 namespace radio_waves.Controllers
 {
     
-
     public class TechniciansController : Controller
     {
         private readonly ApplicationDbContext _context;

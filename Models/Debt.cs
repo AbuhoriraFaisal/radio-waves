@@ -14,6 +14,7 @@
         public decimal Amount { get; set; }
         public DateTime DueDate { get; set; }
         public bool IsPaid { get; set; }
+        public DateTime DebtDate = DateTime.Now;
     }
 
 }
