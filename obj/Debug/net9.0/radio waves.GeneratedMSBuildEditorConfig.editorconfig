@@ -120,6 +120,14 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGFydG5lclNldHRsZW1lbnRzXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/MathabaIsmail/downloads/radio-waves/Views/Partners/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGFydG5lcnNcQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/MathabaIsmail/downloads/radio-waves/Views/Partners/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGFydG5lcnNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/MathabaIsmail/downloads/radio-waves/Views/Patients/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGF0aWVudHNcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
@@ -162,6 +170,22 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/MathabaIsmail/downloads/radio-waves/Views/Reservations/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVzZXJ2YXRpb25zXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/MathabaIsmail/downloads/radio-waves/Views/Settlement/InsuranceCompanySettlement.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2V0dGxlbWVudFxJbnN1cmFuY2VDb21wYW55U2V0dGxlbWVudC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/MathabaIsmail/downloads/radio-waves/Views/Settlement/InsuranceCompanySummary.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2V0dGxlbWVudFxJbnN1cmFuY2VDb21wYW55U3VtbWFyeS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/MathabaIsmail/downloads/radio-waves/Views/Settlement/PartnersSettlement.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2V0dGxlbWVudFxQYXJ0bmVyc1NldHRsZW1lbnQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/MathabaIsmail/downloads/radio-waves/Views/Settlement/PartnerSummary.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2V0dGxlbWVudFxQYXJ0bmVyU3VtbWFyeS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/MathabaIsmail/downloads/radio-waves/Views/Settlement/TechnicianSummary.cshtml]

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("radio waves")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cb4119c263817aa3e9774ef68c77ced44c0a9e22")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4608a63ea52a4701ce45c382d2d709411baa7496")]
 [assembly: System.Reflection.AssemblyProductAttribute("radio waves")]
 [assembly: System.Reflection.AssemblyTitleAttribute("radio waves")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

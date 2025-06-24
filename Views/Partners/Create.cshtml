@@ -1,4 +1,4 @@
-﻿@model radio_waves.Models.PartnerSettlement
+﻿@model radio_waves.Models.Partner
 
 @{
     ViewData["Title"] = "Create";
@@ -6,31 +6,21 @@
 
 <h1>Create</h1>
 
-<h4>PartnerSettlement</h4>
+<h4>Partner</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Id" class="control-label"></label>
-                <input asp-for="Id" class="form-control" />
-                <span asp-validation-for="Id" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="PartnerName" class="control-label"></label>
                 <input asp-for="PartnerName" class="form-control" />
                 <span asp-validation-for="PartnerName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Amount" class="control-label"></label>
-                <input asp-for="Amount" class="form-control" />
-                <span asp-validation-for="Amount" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SettlementDate" class="control-label"></label>
-                <input asp-for="SettlementDate" class="form-control" />
-                <span asp-validation-for="SettlementDate" class="text-danger"></span>
+                <label asp-for="Amount_Percentage" class="control-label"></label>
+                <input asp-for="Amount_Percentage" class="form-control" />
+                <span asp-validation-for="Amount_Percentage" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

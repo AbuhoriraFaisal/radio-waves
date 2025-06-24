@@ -1,0 +1,62 @@
+﻿@model IEnumerable<radio_waves.Models.PartnerSettlement>
+
+@{
+    ViewData["Title"] = "PartnerSummary";
+}
+
+<h1>PartnerSummary</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<form asp-action="PartnersSettlement" method="post">
+    @for (int i = 0; i < Model.Count(); i++)
+    {
+        <input type="hidden" name="Settlements[@i].PartnerName" value="@Model.ElementAt(i).PartnerName" />
+        <input type="hidden" name="Settlements[@i].Amount" value="@Model.ElementAt(i).Amount" />
+        <input type="hidden" name="Settlements[@i].SettlementDate" value="@Model.ElementAt(i).SettlementDate.ToString("yyyy-MM-dd")" />
+    }
+
+    <button type="submit" class="btn btn-success">Finalize Partner Settlement</button>
+</form>
+<br />
+<br /> 
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.PartnerName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Amount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SettlementDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.PartnerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SettlementDate)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+

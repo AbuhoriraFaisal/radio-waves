@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using radio_waves.Data;
 
@@ -11,9 +12,11 @@ using radio_waves.Data;
 namespace radio_waves.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250623084941_IsTechShared")]
+    partial class IsTechShared
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -241,9 +244,6 @@ namespace radio_waves.Migrations
                     b.Property<bool>("IsPaid")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsSealed")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("IsTechnicianShared")
                         .HasColumnType("bit");
 
@@ -283,9 +283,6 @@ namespace radio_waves.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsSealed")
-                        .HasColumnType("bit");
-
                     b.HasKey("Id");
 
                     b.ToTable("Expenditures");
@@ -303,9 +300,6 @@ namespace radio_waves.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<bool>("IsComplete")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsSealed")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsTechnicianShared")
@@ -391,52 +385,6 @@ namespace radio_waves.Migrations
                     b.ToTable("InsuranceCompanies");
                 });
 
-            modelBuilder.Entity("radio_waves.Models.InsuranceCompanySettlementViewModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("InsuranceCompanyName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("NetPayable")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("SettlementDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("TotalInsuranceShare")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("InsuranceCompanySettlementViewModel");
-                });
-
-            modelBuilder.Entity("radio_waves.Models.Partner", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("Amount_Percentage")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("PartnerName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Partners");
-                });
-
             modelBuilder.Entity("radio_waves.Models.PartnerSettlement", b =>
                 {
                     b.Property<int>("Id")
@@ -445,7 +393,7 @@ namespace radio_waves.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal>("Amount")
+                    b.Property<decimal>("Amount_Percentage")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("PartnerName")
