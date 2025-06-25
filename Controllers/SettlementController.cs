@@ -25,6 +25,7 @@ namespace radio_waves.Controllers
                 var reservations = await _context.Reservations
                     .Where(r => r.TechnicianId == tech.Id)
                     .ToListAsync(); // Pull data into memory
+                //try to check the git hub
 
 
                 if (!reservations.Any()) continue;
