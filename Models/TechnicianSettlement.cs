@@ -15,6 +15,7 @@
         public DateTime GeneratedAt { get; set; } = DateTime.UtcNow;
 
         public Technician Technician { get; set; }
+        public DateTime SettelmentDate { get; set; }
     }
 
 }

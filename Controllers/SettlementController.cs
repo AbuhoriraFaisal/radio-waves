@@ -17,7 +17,7 @@ namespace radio_waves.Controllers
             var targetDate = DateTime.Today;
             var technicians = await _context.Technicians.ToListAsync();
             var shifts = await _context.Shifts.ToListAsync();
-            var viewModels = new List<TechnicianSettlementViewModel>();
+            var viewModels = new List<TechnicianSettlement>();
 
             foreach (var tech in technicians)
             {
@@ -44,7 +44,7 @@ namespace radio_waves.Controllers
                 var totalDebt = debts.Sum(d => d.TechnicianShare);
                 //var totalExpenses = expenditures.Sum(e => e.Amount);
 
-                var viewModel = new TechnicianSettlementViewModel
+                var viewModel = new TechnicianSettlement
                 {
                     TechnicianName = tech.FullName,
                     TotalFromReservations = Math.Round(totalReservations, 2),
@@ -67,27 +67,21 @@ namespace radio_waves.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> TechniciansSettlement(List<TechnicianSettlement> Settlements)
         {
-            if (Settlements != null && Settlements.Sum(i => i.TotalFromReservations) == 0 && Settlements.Sum(i => i.NetPayable) == 0)
-                return View(await _context.PartnerSettlements.ToListAsync());
-            await _context.Reservations
-            .Where(r => !r.IsSealed)
-            .ExecuteUpdateAsync(setters => setters
-            .SetProperty(r => r.IsSealed, true));
+            if (Settlements != null && Settlements.Sum(i => i.NetPayable) == 0)
+                return View(await _context.TechnicianSettlements.ToListAsync());
+           
 
             await _context.Insurances
-            .Where(r => r.IsComplete && r.IsTechnicianShared && !r.IsSealed)
+            .Where(r => r.IsComplete && !r.IsTechnicianShared && !r.IsSealed)
             .ExecuteUpdateAsync(setters => setters
-            .SetProperty(r => r.IsSealed, true));
+            .SetProperty(r => r.IsTechnicianShared, true));
 
             await _context.Debts
-            .Where(r => r.IsTechnicianShared && r.IsPaid && !r.IsSealed)
+            .Where(r => !r.IsTechnicianShared && r.IsPaid && !r.IsSealed)
             .ExecuteUpdateAsync(setters => setters
-            .SetProperty(r => r.IsSealed, true));
+            .SetProperty(r => r.IsTechnicianShared, true));
 
-            await _context.Expenditures
-            //.Where(r => !r.IsSealed)
-            .ExecuteUpdateAsync(setters => setters
-            .SetProperty(r => r.IsSealed, true));
+           
 
             await _context.TechnicianSettlements.AddRangeAsync(Settlements);
             await _context.SaveChangesAsync();

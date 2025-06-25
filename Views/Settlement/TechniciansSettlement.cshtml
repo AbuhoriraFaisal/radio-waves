@@ -1,20 +1,30 @@
 ﻿@model IEnumerable<radio_waves.Models.TechnicianSettlement>
 
 @{
-    ViewData["Title"] = "TechnicianSummary";
+    ViewData["Title"] = "TechniciansSettlement";
 }
 
-<h1>TechnicianSummary</h1>
+<h1>TechniciansSettlement</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<form asp-action="TechniciansSettlement" method="post">
+    @for (int i = 0; i < Model.Count(); i++)
+    {
+        <input type="hidden" name="Settlements[@i].TechnicianId" value="@Model.ElementAt(i).TechnicianId" />
+        <input type="hidden" name="Settlements[@i].TechnicianName" value="@Model.ElementAt(i).TechnicianName" />
 
-<p>
-    <a class="btn btn-primary" asp-action="TechnicianSummary">Run End of Day Settlement</a>
-</p>
-<br />
-<br />
+        <input type="hidden" name="Settlements[@i].TotalFromReservations" value="@Model.ElementAt(i).TotalFromReservations" />
+        <input type="hidden" name="Settlements[@i].TotalFromInsurance" value="@Model.ElementAt(i).TotalFromInsurance" />
+        <input type="hidden" name="Settlements[@i].TotalDebtShare" value="@Model.ElementAt(i).TotalDebtShare" />
+        <input type="hidden" name="Settlements[@i].TotalExpenses" value="@Model.ElementAt(i).TotalExpenses" />
+        <input type="hidden" name="Settlements[@i].NetPayable" value="@Model.ElementAt(i).NetPayable" />
+
+        <input type="hidden" name="Settlements[@i].GeneratedAt" value="@Model.ElementAt(i).GeneratedAt.ToString("o")" />
+        <input type="hidden" name="Settlements[@i].SettelmentDate" value="@Model.ElementAt(i).SettelmentDate.ToString("yyyy-MM-dd")" />
+    }
+
+    <button type="submit" class="btn btn-success">Finalize Technician Settlement</button>
+</form>
+
 <table class="table">
     <thead>
         <tr>
@@ -37,7 +47,10 @@
                 @Html.DisplayNameFor(model => model.NetPayable)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.SettelmentDate)
+                @Html.DisplayNameFor(model => model.GeneratedAt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Technician)
             </th>
             <th></th>
         </tr>
@@ -64,7 +77,10 @@
                 @Html.DisplayFor(modelItem => item.NetPayable)
             </td>
             <td>
-                    @Html.DisplayFor(modelItem => item.SettelmentDate)
+                @Html.DisplayFor(modelItem => item.GeneratedAt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Technician.Id)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

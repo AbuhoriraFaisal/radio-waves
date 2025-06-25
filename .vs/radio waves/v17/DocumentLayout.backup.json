@@ -3,32 +3,32 @@
   "WorkspaceRootPath": "C:\\Users\\MathabaIsmail\\downloads\\radio-waves\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{D1D32FFD-2698-4752-BEA5-DA47BFA67A16}|radio waves.csproj|c:\\users\\mathabaismail\\downloads\\radio-waves\\views\\settlement\\insurancecompanysettlement.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{D1D32FFD-2698-4752-BEA5-DA47BFA67A16}|radio waves.csproj|solutionrelative:views\\settlement\\insurancecompanysettlement.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{D1D32FFD-2698-4752-BEA5-DA47BFA67A16}|radio waves.csproj|c:\\users\\mathabaismail\\downloads\\radio-waves\\views\\settlement\\technicianssettlement.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D1D32FFD-2698-4752-BEA5-DA47BFA67A16}|radio waves.csproj|solutionrelative:views\\settlement\\technicianssettlement.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D1D32FFD-2698-4752-BEA5-DA47BFA67A16}|radio waves.csproj|c:\\users\\mathabaismail\\downloads\\radio-waves\\models\\techniciansettlement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D1D32FFD-2698-4752-BEA5-DA47BFA67A16}|radio waves.csproj|solutionrelative:models\\techniciansettlement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D1D32FFD-2698-4752-BEA5-DA47BFA67A16}|radio waves.csproj|c:\\users\\mathabaismail\\downloads\\radio-waves\\models\\insurancecompanysettlement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D1D32FFD-2698-4752-BEA5-DA47BFA67A16}|radio waves.csproj|solutionrelative:models\\insurancecompanysettlement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{D1D32FFD-2698-4752-BEA5-DA47BFA67A16}|radio waves.csproj|c:\\users\\mathabaismail\\downloads\\radio-waves\\controllers\\settlementcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D1D32FFD-2698-4752-BEA5-DA47BFA67A16}|radio waves.csproj|solutionrelative:controllers\\settlementcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D1D32FFD-2698-4752-BEA5-DA47BFA67A16}|radio waves.csproj|c:\\users\\mathabaismail\\downloads\\radio-waves\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D1D32FFD-2698-4752-BEA5-DA47BFA67A16}|radio waves.csproj|solutionrelative:data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D1D32FFD-2698-4752-BEA5-DA47BFA67A16}|radio waves.csproj|c:\\users\\mathabaismail\\downloads\\radio-waves\\views\\settlement\\insurancecompanysummary.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{D1D32FFD-2698-4752-BEA5-DA47BFA67A16}|radio waves.csproj|solutionrelative:views\\settlement\\insurancecompanysummary.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{D1D32FFD-2698-4752-BEA5-DA47BFA67A16}|radio waves.csproj|c:\\users\\mathabaismail\\downloads\\radio-waves\\views\\settlement\\partnerssettlement.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{D1D32FFD-2698-4752-BEA5-DA47BFA67A16}|radio waves.csproj|solutionrelative:views\\settlement\\partnerssettlement.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D1D32FFD-2698-4752-BEA5-DA47BFA67A16}|radio waves.csproj|c:\\users\\mathabaismail\\downloads\\radio-waves\\views\\settlement\\partnersummary.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{D1D32FFD-2698-4752-BEA5-DA47BFA67A16}|radio waves.csproj|solutionrelative:views\\settlement\\partnersummary.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{D1D32FFD-2698-4752-BEA5-DA47BFA67A16}|radio waves.csproj|c:\\users\\mathabaismail\\downloads\\radio-waves\\views\\settlement\\insurancecompanysettlement.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D1D32FFD-2698-4752-BEA5-DA47BFA67A16}|radio waves.csproj|solutionrelative:views\\settlement\\insurancecompanysettlement.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D1D32FFD-2698-4752-BEA5-DA47BFA67A16}|radio waves.csproj|c:\\users\\mathabaismail\\downloads\\radio-waves\\models\\insurancecompanysettlementviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D1D32FFD-2698-4752-BEA5-DA47BFA67A16}|radio waves.csproj|solutionrelative:models\\insurancecompanysettlementviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{D1D32FFD-2698-4752-BEA5-DA47BFA67A16}|radio waves.csproj|c:\\users\\mathabaismail\\downloads\\radio-waves\\views\\settlement\\partnersummary.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D1D32FFD-2698-4752-BEA5-DA47BFA67A16}|radio waves.csproj|solutionrelative:views\\settlement\\partnersummary.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -38,17 +38,43 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "TechnicianSettlement.cs",
+              "DocumentMoniker": "C:\\Users\\MathabaIsmail\\downloads\\radio-waves\\Models\\TechnicianSettlement.cs",
+              "RelativeDocumentMoniker": "Models\\TechnicianSettlement.cs",
+              "ToolTip": "C:\\Users\\MathabaIsmail\\downloads\\radio-waves\\Models\\TechnicianSettlement.cs",
+              "RelativeToolTip": "Models\\TechnicianSettlement.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAA1wBEAAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-25T09:43:56.948Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "TechniciansSettlement.cshtml",
+              "DocumentMoniker": "C:\\Users\\MathabaIsmail\\downloads\\radio-waves\\Views\\Settlement\\TechniciansSettlement.cshtml",
+              "RelativeDocumentMoniker": "Views\\Settlement\\TechniciansSettlement.cshtml",
+              "ToolTip": "C:\\Users\\MathabaIsmail\\downloads\\radio-waves\\Views\\Settlement\\TechniciansSettlement.cshtml",
+              "RelativeToolTip": "Views\\Settlement\\TechniciansSettlement.cshtml",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-06-25T09:39:40.203Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "InsuranceCompanySettlement.cshtml",
               "DocumentMoniker": "C:\\Users\\MathabaIsmail\\downloads\\radio-waves\\Views\\Settlement\\InsuranceCompanySettlement.cshtml",
               "RelativeDocumentMoniker": "Views\\Settlement\\InsuranceCompanySettlement.cshtml",
               "ToolTip": "C:\\Users\\MathabaIsmail\\downloads\\radio-waves\\Views\\Settlement\\InsuranceCompanySettlement.cshtml",
               "RelativeToolTip": "Views\\Settlement\\InsuranceCompanySettlement.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-06-24T13:03:56.968Z",
               "EditorCaption": ""
@@ -56,54 +82,27 @@
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "ApplicationDbContext.cs",
-              "DocumentMoniker": "C:\\Users\\MathabaIsmail\\downloads\\radio-waves\\Data\\ApplicationDbContext.cs",
-              "RelativeDocumentMoniker": "Data\\ApplicationDbContext.cs",
-              "ToolTip": "C:\\Users\\MathabaIsmail\\downloads\\radio-waves\\Data\\ApplicationDbContext.cs",
-              "RelativeToolTip": "Data\\ApplicationDbContext.cs",
-              "ViewState": "AgIAABMAAAAAAAAAAAAkwCEAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-24T12:56:18.24Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "InsuranceCompanySummary.cshtml",
-              "DocumentMoniker": "C:\\Users\\MathabaIsmail\\downloads\\radio-waves\\Views\\Settlement\\InsuranceCompanySummary.cshtml",
-              "RelativeDocumentMoniker": "Views\\Settlement\\InsuranceCompanySummary.cshtml",
-              "ToolTip": "C:\\Users\\MathabaIsmail\\downloads\\radio-waves\\Views\\Settlement\\InsuranceCompanySummary.cshtml",
-              "RelativeToolTip": "Views\\Settlement\\InsuranceCompanySummary.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-06-24T10:07:55.292Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "InsuranceCompanySettlementViewModel.cs",
-              "DocumentMoniker": "C:\\Users\\MathabaIsmail\\downloads\\radio-waves\\Models\\InsuranceCompanySettlementViewModel.cs",
-              "RelativeDocumentMoniker": "Models\\InsuranceCompanySettlementViewModel.cs",
-              "ToolTip": "C:\\Users\\MathabaIsmail\\downloads\\radio-waves\\Models\\InsuranceCompanySettlementViewModel.cs",
-              "RelativeToolTip": "Models\\InsuranceCompanySettlementViewModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAArAAAAAAAAAA==",
+              "Title": "InsuranceCompanySettlement.cs",
+              "DocumentMoniker": "C:\\Users\\MathabaIsmail\\downloads\\radio-waves\\Models\\InsuranceCompanySettlement.cs",
+              "RelativeDocumentMoniker": "Models\\InsuranceCompanySettlement.cs",
+              "ToolTip": "C:\\Users\\MathabaIsmail\\downloads\\radio-waves\\Models\\InsuranceCompanySettlement.cs",
+              "RelativeToolTip": "Models\\InsuranceCompanySettlement.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAcAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-06-24T10:07:28.321Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "PartnerSummary.cshtml",
               "DocumentMoniker": "C:\\Users\\MathabaIsmail\\downloads\\radio-waves\\Views\\Settlement\\PartnerSummary.cshtml",
               "RelativeDocumentMoniker": "Views\\Settlement\\PartnerSummary.cshtml",
               "ToolTip": "C:\\Users\\MathabaIsmail\\downloads\\radio-waves\\Views\\Settlement\\PartnerSummary.cshtml",
               "RelativeToolTip": "Views\\Settlement\\PartnerSummary.cshtml",
-              "ViewState": "AgIAABgAAAAAAAAAAAAAAAMAAAAnAAAAAAAAAA==",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-06-24T09:28:01.113Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-24T09:28:01.113Z"
             },
             {
               "$type": "Document",
@@ -120,13 +119,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "SettlementController.cs",
               "DocumentMoniker": "C:\\Users\\MathabaIsmail\\downloads\\radio-waves\\Controllers\\SettlementController.cs",
               "RelativeDocumentMoniker": "Controllers\\SettlementController.cs",
               "ToolTip": "C:\\Users\\MathabaIsmail\\downloads\\radio-waves\\Controllers\\SettlementController.cs",
               "RelativeToolTip": "Controllers\\SettlementController.cs",
-              "ViewState": "AgIAAFcAAAAAAAAAAAAkwGEAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAgwBQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-06-19T08:33:00.514Z",
               "EditorCaption": ""
