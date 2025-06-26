@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using radio_waves.Data;
 using radio_waves.Models;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace radio_waves.Controllers
 {
@@ -23,7 +24,7 @@ namespace radio_waves.Controllers
             {
 
                 var reservations = await _context.Reservations
-                    .Where(r => r.TechnicianId == tech.Id)
+                    .Where(r => r.TechnicianId == tech.Id && !r.IsTechnicianShared)
                     .ToListAsync(); // Pull data into memory
                 //try to check the git hub
 
@@ -47,6 +48,7 @@ namespace radio_waves.Controllers
 
                 var viewModel = new TechnicianSettlement
                 {
+                    TechnicianId = tech.Id,
                     TechnicianName = tech.FullName,
                     TotalFromReservations = Math.Round(totalReservations, 2),
                     TotalFromInsurance = Math.Round(totalInsurance, 2),
@@ -68,35 +70,57 @@ namespace radio_waves.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> TechniciansSettlement(List<TechnicianSettlement> Settlements)
         {
-            if (Settlements != null && Settlements.Sum(i => i.NetPayable) == 0)
-                return View(await _context.TechnicianSettlements.ToListAsync());
-           
+            if (Settlements == null || Settlements.Sum(i => i.NetPayable) == 0)
+                return RedirectToAction(nameof(TechniciansSettlement));
 
-            await _context.Insurances
-            .Where(r => r.IsComplete && !r.IsTechnicianShared && !r.IsSealed)
-            .ExecuteUpdateAsync(setters => setters
-            .SetProperty(r => r.IsTechnicianShared, true));
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+                try
+                {
+                    // 1. Update Insurance
+                    await _context.Insurances
+                .Where(r => r.IsComplete && !r.IsTechnicianShared && !r.IsSealed)
+                .ExecuteUpdateAsync(setters => setters
+                .SetProperty(r => r.IsTechnicianShared, true));
+                //Update Debts
+                    await _context.Debts
+                    .Where(r => !r.IsTechnicianShared && r.IsPaid && !r.IsSealed)
+                    .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(r => r.IsTechnicianShared, true));
 
-            await _context.Debts
-            .Where(r => !r.IsTechnicianShared && r.IsPaid && !r.IsSealed)
-            .ExecuteUpdateAsync(setters => setters
-            .SetProperty(r => r.IsTechnicianShared, true));
+                //Updtae Reservation
+                await _context.Reservations.Where(r => !r.IsTechnicianShared && !r.IsSealed)
+                                           .ExecuteUpdateAsync(s => s.SetProperty(r => r.IsTechnicianShared,
+                                           true));
 
-           
+                    await _context.TechnicianSettlements.AddRangeAsync(Settlements);
+                    await _context.SaveChangesAsync();
 
-            await _context.TechnicianSettlements.AddRangeAsync(Settlements);
-            await _context.SaveChangesAsync();
-            Settlements = null;
-            return View(await _context.TechnicianSettlements.ToListAsync());
+                // 4. Commit all if successful
+                await transaction.CommitAsync();
 
-        }
+            }
+                catch (Exception ex)
+                {
+                    // 5. Rollback on error
+                    await transaction.RollbackAsync();
+
+                    // Optional: log error or return to error page
+                    ModelState.AddModelError("", "An error occurred while saving the settlements.");
+                    return RedirectToAction(nameof(TechnicianSummary));
+                }
+
+                // Redirect to GET to prevent form resubmission
+                return RedirectToAction(nameof(TechniciansSettlement));
+
+            }
+
 
         [HttpGet]
 
         public async Task<IActionResult> TechniciansSettlement()
         {
-
-            return View(await _context.TechnicianSettlements.ToListAsync());
+            var techSettlments = await _context.TechnicianSettlements.ToListAsync();
+            return View(techSettlments);
         }
 
         /*------------------------------------------------ Insurance Companies---------------------------------------*/
@@ -117,6 +141,7 @@ namespace radio_waves.Controllers
 
                 viewModels.Add(new InsuranceCompanySettlement
                 {
+                    ProviderId = company.Id,
                     InsuranceCompanyName = company.Provider,
                     TotalInsuranceShare = Math.Round(totalInsuranceAmount, 2),
                     NetPayable = Math.Round(totalInsuranceAmount, 2),
@@ -130,11 +155,42 @@ namespace radio_waves.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        public async Task<IActionResult> MarkAsComplete(InsuranceCompanySettlement insuraceCSettelment)
+        {
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+
+            try
+            {
+                await _context.Insurances
+               .Where(r => r.ProviderId == insuraceCSettelment.ProviderId && !r.IsSealed)
+               .ExecuteUpdateAsync(setters => setters
+               .SetProperty(r => r.IsComplete, true));
+
+
+                await _context.InsuranceCompanySettlements.AddAsync(insuraceCSettelment);
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                // Optional: redirect instead of returning View (to prevent re-submission)
+                return RedirectToAction(nameof(InsuranceCompanySettlement));
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                ModelState.AddModelError("", "An error occurred while completing the settlement.");
+                return RedirectToAction(nameof(InsuranceCompanySummary));
+            }
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> InsuranceCompanySettlement(List<InsuranceCompanySettlement> Settlements)
         {
-            if ( Settlements.Sum(i => i.TotalInsuranceShare) == 0)
+            if (Settlements.Sum(i => i.TotalInsuranceShare) == 0)
                 return View(await _context.PartnerSettlements.ToListAsync());
-            
+
 
             await _context.Insurances
             .Where(r => r.IsComplete && !r.IsTechnicianShared && !r.IsSealed)
@@ -227,7 +283,7 @@ namespace radio_waves.Controllers
             .SetProperty(r => r.IsSealed, true));
 
             await _context.Insurances
-            .Where(r => r.IsComplete && r.IsTechnicianShared  && !r.IsSealed)
+            .Where(r => r.IsComplete && r.IsTechnicianShared && !r.IsSealed)
             .ExecuteUpdateAsync(setters => setters
             .SetProperty(r => r.IsSealed, true));
 
@@ -249,11 +305,11 @@ namespace radio_waves.Controllers
         }
 
         [HttpGet]
-        
+
         public async Task<IActionResult> PartnersSettlement()
         {
-            
-                return View(await _context.PartnerSettlements.ToListAsync());
+
+            return View(await _context.PartnerSettlements.ToListAsync());
         }
     }
 }

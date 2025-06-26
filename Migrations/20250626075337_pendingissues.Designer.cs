@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using radio_waves.Data;
 
@@ -11,9 +12,11 @@ using radio_waves.Data;
 namespace radio_waves.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250626075337_pendingissues")]
+    partial class pendingissues
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -381,9 +384,6 @@ namespace radio_waves.Migrations
                     b.Property<decimal>("NetPayable")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("ProviderId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("SettlementDate")
                         .HasColumnType("datetime2");
 
@@ -579,9 +579,6 @@ namespace radio_waves.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsSealed")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsTechnicianShared")
                         .HasColumnType("bit");
 
                     b.Property<decimal>("PaiedAmount")

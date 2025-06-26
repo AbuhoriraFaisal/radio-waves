@@ -125,6 +125,15 @@ namespace radio_waves.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        public async Task<IActionResult> MarkAsTechnicianShared(int id)
+        {
+            var insurance = await _context.Insurances.FindAsync(id);
+            if (insurance == null) return NotFound();
+
+            insurance.IsTechnicianShared = !insurance.IsTechnicianShared;
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
 
         // GET: Insurances/Delete/5
         public async Task<IActionResult> Delete(int? id)

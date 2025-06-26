@@ -32,6 +32,8 @@ namespace radio_waves.Models
         public bool IsDebt { get; set; }
         public bool IsCommission { get; set; }
         public bool CoveredByInsurance { get; set; }
+
+        public bool IsTechnicianShared { get; set; }
         public int? InsuranceId { get; set; }
         public decimal TechnicianShare { get; set; } // = TotalPrice * TechnicianPercentage at booking time
         //public string 

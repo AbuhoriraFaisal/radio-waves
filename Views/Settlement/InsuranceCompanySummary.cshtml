@@ -13,6 +13,9 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.ProviderId)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.InsuranceCompanyName)
             </th>
             <th>
@@ -31,6 +34,9 @@
 @foreach (var item in Model) {
         <tr>
             <td>
+                @Html.DisplayFor(modelItem => item.ProviderId)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.InsuranceCompanyName)
             </td>
             <td>
@@ -44,8 +50,15 @@
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <form asp-action="MarkAsComplete" method="post" style="display:inline;">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="ProviderId" value="@item.ProviderId" />
+                        <input type="hidden" name="InsuranceCompanyName" value="@item.InsuranceCompanyName" />
+                        <input type="hidden" name="TotalInsuranceShare" value="@item.TotalInsuranceShare" />
+                        <input type="hidden" name="NetPayable" value="@item.NetPayable" />
+                        <input type="hidden" name="SettlementDate" value="@item.SettlementDate.ToString("yyyy-MM-ddTHH:mm:ss")" />
+                        <button type="submit" class="btn btn-sm btn-success">Settle</button>
+                    </form>
             </td>
         </tr>
 }
