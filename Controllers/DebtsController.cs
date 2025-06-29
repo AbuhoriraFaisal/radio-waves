@@ -15,7 +15,10 @@ namespace radio_waves.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index() => View(await _context.Debts.ToListAsync());
+        public async Task<IActionResult> Index()
+        {
+            return View(await _context.Debts.ToListAsync());
+        }
 
         public IActionResult Create()
         {

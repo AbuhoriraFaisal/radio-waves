@@ -20,25 +20,50 @@ namespace radio_waves.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Partner settlement)
+        public async Task<IActionResult> Create(Partner partner)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(settlement);
+                _context.Add(partner);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(settlement);
+            return View(partner);
         }
 
         public async Task<IActionResult> Delete(int id)
         {
-            var settlement = await _context.Partners.FindAsync(id);
-            if (settlement == null) return NotFound();
+            var partner = await _context.Partners.FindAsync(id);
+            if (partner == null) return NotFound();
 
-           // _context.PartnerSettlements.Remove(settlement);
+            _context.Partners.Remove(partner);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            var partner = await _context.Partners.FindAsync(id);
+            if (partner == null) return NotFound();
+
+            await _context.SaveChangesAsync();
+            return View(partner);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id ,Partner partner)
+        {
+            if (id != partner.Id)
+            {
+                return NotFound();
+            }
+            if (ModelState.IsValid)
+            {
+                _context.Update(partner);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(partner);
         }
     }
 

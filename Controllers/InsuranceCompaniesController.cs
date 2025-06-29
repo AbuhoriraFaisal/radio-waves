@@ -124,14 +124,14 @@ namespace radio_waves.Controllers
                 return NotFound();
             }
 
-            var insuranceCompanies = await _context.InsuranceCompanies
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var insuranceCompanies = await _context.InsuranceCompanies.FindAsync(id);
             if (insuranceCompanies == null)
             {
                 return NotFound();
             }
-
-            return View(insuranceCompanies);
+            _context.InsuranceCompanies.Remove(insuranceCompanies);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // POST: InsuranceCompanies/Delete/5

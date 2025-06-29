@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using radio_waves.Data;
 
@@ -11,9 +12,11 @@ using radio_waves.Data;
 namespace radio_waves.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250629113750_newdb")]
+    partial class newdb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -238,9 +241,6 @@ namespace radio_waves.Migrations
                     b.Property<DateTime>("DueDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsCanceled")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("IsPaid")
                         .HasColumnType("bit");
 
@@ -304,9 +304,6 @@ namespace radio_waves.Migrations
 
                     b.Property<decimal>("InsuranceAmount")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<bool>("IsCanceled")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("IsComplete")
                         .HasColumnType("bit");
@@ -456,11 +453,19 @@ namespace radio_waves.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("HasInsurance")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("InsuranceId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("InsuranceId");
 
                     b.ToTable("Patients");
                 });
@@ -479,6 +484,9 @@ namespace radio_waves.Migrations
                     b.Property<bool>("IsCoveredByInsurance")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("PatientId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("PaymentDate")
                         .HasColumnType("datetime2");
 
@@ -489,6 +497,8 @@ namespace radio_waves.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PatientId");
 
                     b.HasIndex("PaymentMethodId");
 
@@ -770,8 +780,21 @@ namespace radio_waves.Migrations
                     b.Navigation("Reservation");
                 });
 
+            modelBuilder.Entity("radio_waves.Models.Patient", b =>
+                {
+                    b.HasOne("radio_waves.Models.InsuranceCompanies", "Insurance")
+                        .WithMany()
+                        .HasForeignKey("InsuranceId");
+
+                    b.Navigation("Insurance");
+                });
+
             modelBuilder.Entity("radio_waves.Models.Payment", b =>
                 {
+                    b.HasOne("radio_waves.Models.Patient", null)
+                        .WithMany("Payments")
+                        .HasForeignKey("PatientId");
+
                     b.HasOne("radio_waves.Models.PaymentMethod", "PaymentMethod")
                         .WithMany("Payments")
                         .HasForeignKey("PaymentMethodId")
@@ -792,7 +815,7 @@ namespace radio_waves.Migrations
             modelBuilder.Entity("radio_waves.Models.Reservation", b =>
                 {
                     b.HasOne("radio_waves.Models.Patient", "Patient")
-                        .WithMany()
+                        .WithMany("Reservations")
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -833,6 +856,13 @@ namespace radio_waves.Migrations
                         .IsRequired();
 
                     b.Navigation("Technician");
+                });
+
+            modelBuilder.Entity("radio_waves.Models.Patient", b =>
+                {
+                    b.Navigation("Payments");
+
+                    b.Navigation("Reservations");
                 });
 
             modelBuilder.Entity("radio_waves.Models.PaymentMethod", b =>

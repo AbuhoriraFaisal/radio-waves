@@ -7,10 +7,11 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using radio_waves.Data;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using NuGet.Versioning;
 
 namespace radio_waves.Controllers
 {
-    
+
 
     public class ReservationsController : Controller
     {
@@ -23,7 +24,17 @@ namespace radio_waves.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var reservations = await _context.Reservations.Include(r => r.RadiologyType).ToListAsync();
+            var reservations = await _context.Reservations.Include(r => r.RadiologyType)
+                .Include(r => r.Patient)
+                .Include(r => r.Technician)
+                .ToListAsync();
+            return View(reservations);
+        }
+        public async Task<IActionResult> Details(int id)
+        {
+            var reservations = await _context.Reservations.Include(r => r.RadiologyType)
+                .Include(r => r.Patient)
+                .Include(r => r.Technician).FirstOrDefaultAsync(r => r.Id==id); // Assuming you want to show details of a specific reservation
             return View(reservations);
         }
 
@@ -37,7 +48,7 @@ namespace radio_waves.Controllers
             ViewBag.RadiologyTypesSelectList = new SelectList(_context.RadiologyTypes, "Id", "Name");
             ViewBag.ShiftsSelectList = new SelectList(_context.Shifts, "Id", "Name", currentShift?.Id);
             ViewBag.InsuranceCompanies = new SelectList(_context.InsuranceCompanies, "Id", "Provider");
-            
+
             ViewBag.InsuranceCompaniesJson = _context.InsuranceCompanies
                 .Select(i => new { i.Id, i.CoveragedPercentage })
                 .ToList();
@@ -87,8 +98,9 @@ namespace radio_waves.Controllers
                         TechnicianShare = (reservation.BasePrice - reservation.PaiedAmount) * (decimal)(shift.TechnicianPercentage / 100.0),
                         TechnicianId = reservation.TechnicianId
                     };
-                    if (reservation.CoveredByInsurance) { 
-                        d.Amount = d.Amount - (decimal)((double) reservation.BasePrice *  insurneCompany.CoveragedPercentage / 100.0);
+                    if (reservation.CoveredByInsurance)
+                    {
+                        d.Amount = d.Amount - (decimal)((double)reservation.BasePrice * insurneCompany.CoveragedPercentage / 100.0);
                         d.TechnicianShare = d.Amount * (decimal)(shift.TechnicianPercentage / 100.0);
                     }
                     _context.Add(d);
@@ -102,8 +114,8 @@ namespace radio_waves.Controllers
                         PatientId = reservation.PatientId,
                         ReservationId = reservation.Id,
                         IsComplete = false,
-                        InsuranceAmount =  (decimal)((double)reservation.BasePrice * insurneCompany.CoveragedPercentage / 100.0),
-                        PaidAmount =  reservation.PaiedAmount,
+                        InsuranceAmount = (decimal)((double)reservation.BasePrice * insurneCompany.CoveragedPercentage / 100.0),
+                        PaidAmount = reservation.PaiedAmount,
                         PolicyNumber = "1234567",
                         ProviderId = reservation.InsuranceId,
                         TechnicianShare = (decimal)((double)reservation.BasePrice * insurneCompany.CoveragedPercentage / 100.0) * (decimal)(shift.TechnicianPercentage / 100.0),
@@ -166,8 +178,18 @@ namespace radio_waves.Controllers
         {
             var reservation = await _context.Reservations.FindAsync(id);
             if (reservation == null) return NotFound();
-            reservation.IsCanceled = ! reservation.IsCanceled; // Mark as canceled instead of deleting
+            reservation.IsCanceled = !reservation.IsCanceled; // Mark as canceled instead of deleting
             _context.Reservations.Update(reservation);
+            // 1. Update Insurance
+            await _context.Insurances
+            .Where(r => r.ReservationId==id)
+            .ExecuteUpdateAsync(setters => setters
+            .SetProperty(r => r.IsCanceled, reservation.IsCanceled));
+            //Update Debts
+            await _context.Debts
+            .Where(r => r.ReservationId==id)
+            .ExecuteUpdateAsync(setters => setters
+            .SetProperty(r => r.IsCanceled, reservation.IsCanceled));
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

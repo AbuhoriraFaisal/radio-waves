@@ -14,6 +14,7 @@
         public bool IsComplete { get; set; }
         public bool IsTechnicianShared { get; set; }
         public bool IsSealed { get; set; }
+        public bool IsCanceled { get; set; } = false; // Default to false, indicating not canceled
         //public DateTime InsuranceDate = DateTime.Now;
 
     }

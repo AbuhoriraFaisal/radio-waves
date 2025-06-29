@@ -52,7 +52,7 @@ namespace radio_waves.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             var Patient = await _context.Patients.FindAsync(id);
-            ViewBag.Insurances = new SelectList(_context.Insurances, "Id", "Provider", Patient?.InsuranceId);
+            //ViewBag.Insurances = new SelectList(_context.Insurances, "Id", "Provider", Patient?.InsuranceId);
             return Patient == null ? NotFound() : View(Patient);
         }
 
