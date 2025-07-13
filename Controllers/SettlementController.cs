@@ -24,7 +24,7 @@ namespace radio_waves.Controllers
             {
 
                 var reservations = await _context.Reservations
-                    .Where(r => r.TechnicianId == tech.Id && !r.IsTechnicianShared)
+                    .Where(r => r.TechnicianId == tech.Id && !r.IsTechnicianShared &&!r.IsCanceled)
                     .ToListAsync(); // Pull data into memory
                 //try to check the git hub
 
@@ -32,13 +32,13 @@ namespace radio_waves.Controllers
                 if (!reservations.Any()) continue;
 
                 var debts = await _context.Debts
-                    .Where(d => d.TechnicianId == tech.Id && d.IsPaid && !d.IsTechnicianShared && !d.IsSealed)
+                    .Where(d => d.TechnicianId == tech.Id && d.IsPaid && !d.IsTechnicianShared && !d.IsSealed && !d.IsCanceled)
                     .ToListAsync();
 
 
 
                 var insurances = await _context.Insurances
-                    .Where(i => i.TechnicianId == tech.Id && i.IsComplete && !i.IsTechnicianShared && !i.IsSealed)
+                    .Where(i => i.TechnicianId == tech.Id && i.IsComplete && !i.IsTechnicianShared && !i.IsSealed && !i.IsCanceled)
                     .ToListAsync();
 
                 var totalReservations = reservations.Sum(r => r.TechnicianShare);
@@ -78,17 +78,17 @@ namespace radio_waves.Controllers
                 {
                     // 1. Update Insurance
                     await _context.Insurances
-                .Where(r => r.IsComplete && !r.IsTechnicianShared && !r.IsSealed)
+                .Where(r => r.IsComplete && !r.IsTechnicianShared && !r.IsSealed && !r.IsCanceled)
                 .ExecuteUpdateAsync(setters => setters
                 .SetProperty(r => r.IsTechnicianShared, true));
                 //Update Debts
                     await _context.Debts
-                    .Where(r => !r.IsTechnicianShared && r.IsPaid && !r.IsSealed)
+                    .Where(r => !r.IsTechnicianShared && r.IsPaid && !r.IsSealed && !r.IsCanceled)
                     .ExecuteUpdateAsync(setters => setters
                     .SetProperty(r => r.IsTechnicianShared, true));
 
                 //Updtae Reservation
-                await _context.Reservations.Where(r => !r.IsTechnicianShared && !r.IsSealed)
+                await _context.Reservations.Where(r => !r.IsTechnicianShared && !r.IsSealed && !r.IsCanceled)
                                            .ExecuteUpdateAsync(s => s.SetProperty(r => r.IsTechnicianShared,
                                            true));
 
@@ -133,7 +133,7 @@ namespace radio_waves.Controllers
             foreach (var company in companies)
             {
                 var insurances = await _context.Insurances
-                    .Where(i => i.ProviderId == company.Id && !i.IsComplete && !i.IsSealed)
+                    .Where(i => i.ProviderId == company.Id && !i.IsComplete && !i.IsSealed && !i.IsCanceled)
                     .ToListAsync();
                 if (!insurances.Any()) continue;
 
@@ -162,7 +162,7 @@ namespace radio_waves.Controllers
             try
             {
                 await _context.Insurances
-               .Where(r => r.ProviderId == insuraceCSettelment.ProviderId && !r.IsSealed)
+               .Where(r => r.ProviderId == insuraceCSettelment.ProviderId && !r.IsSealed && !r.IsCanceled)
                .ExecuteUpdateAsync(setters => setters
                .SetProperty(r => r.IsComplete, true));
 
@@ -193,7 +193,7 @@ namespace radio_waves.Controllers
 
 
             await _context.Insurances
-            .Where(r => r.IsComplete && !r.IsTechnicianShared && !r.IsSealed)
+            .Where(r => r.IsComplete && !r.IsTechnicianShared && !r.IsSealed && !r.IsCanceled)
             .ExecuteUpdateAsync(setters => setters
             .SetProperty(r => r.IsComplete, true));
 
@@ -221,27 +221,27 @@ namespace radio_waves.Controllers
             var partners = await _context.Partners.ToListAsync();
             var summaries = new List<PartnerSettlement>();
             var reservationsPaiedamount = await _context.Reservations
-               .Where(r => !r.IsSealed)
+               .Where(r => !r.IsSealed && !r.IsCanceled)
                .SumAsync(r => r.PaiedAmount);
 
             var reservationsTchentionShareAmount = await _context.Reservations
-               .Where(r => !r.IsSealed)
+               .Where(r => !r.IsSealed && !r.IsCanceled)
                .SumAsync(r => r.TechnicianShare);
 
             var insurancesPaiedamount = await _context.Insurances
-                .Where(r => r.IsComplete && r.IsTechnicianShared && !r.IsSealed)
+                .Where(r => r.IsComplete && r.IsTechnicianShared && !r.IsSealed && !r.IsCanceled)
                 .SumAsync(r => r.InsuranceAmount);
 
             var insurancesTchentionShareAmount = await _context.Insurances
-               .Where(r => r.IsTechnicianShared && !r.IsSealed)
+               .Where(r => r.IsTechnicianShared && !r.IsSealed && !r.IsCanceled)
                .SumAsync(r => r.TechnicianShare);
 
             var debtsTchentionShareAmount = await _context.Debts
-               .Where(r => r.IsTechnicianShared && !r.IsSealed)
+               .Where(r => r.IsTechnicianShared && !r.IsSealed && !r.IsCanceled)
                .SumAsync(r => r.TechnicianShare);
 
             var debtspaiedAmount = await _context.Debts
-               .Where(r => r.IsPaid && r.IsTechnicianShared && !r.IsSealed)
+               .Where(r => r.IsPaid && r.IsTechnicianShared && !r.IsSealed && !r.IsCanceled)
                .SumAsync(r => r.Amount);
 
 
@@ -278,17 +278,17 @@ namespace radio_waves.Controllers
             if (Settlements != null && Settlements.Sum(i => i.Amount) == 0)
                 return View(await _context.PartnerSettlements.ToListAsync());
             await _context.Reservations
-            .Where(r => !r.IsSealed)
+            .Where(r => !r.IsSealed && !r.IsCanceled)
             .ExecuteUpdateAsync(setters => setters
             .SetProperty(r => r.IsSealed, true));
 
             await _context.Insurances
-            .Where(r => r.IsComplete && r.IsTechnicianShared && !r.IsSealed)
+            .Where(r => r.IsComplete && r.IsTechnicianShared && !r.IsSealed && !r.IsCanceled)
             .ExecuteUpdateAsync(setters => setters
             .SetProperty(r => r.IsSealed, true));
 
             await _context.Debts
-            .Where(r => r.IsTechnicianShared && r.IsPaid && !r.IsSealed)
+            .Where(r => r.IsTechnicianShared && r.IsPaid && !r.IsSealed && !r.IsCanceled)
             .ExecuteUpdateAsync(setters => setters
             .SetProperty(r => r.IsSealed, true));
 
@@ -312,4 +312,4 @@ namespace radio_waves.Controllers
             return View(await _context.PartnerSettlements.ToListAsync());
         }
     }
-}
+}   
