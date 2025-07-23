@@ -1,10 +1,15 @@
-﻿namespace radio_waves.Models
+﻿using System.ComponentModel;
+
+namespace radio_waves.Models
 {
     public class Insurance
     {
         public int Id { get; set; }
-        public int? ProviderId { get; set; }
+        public int? CompanyId { get; set; }
+        public InsuranceCompanies Company { get; set; }
         public int? PatientId { get; set; }
+        public Patient Patient { get; set; }
+        [DisplayName("Reservation No")]
         public int? ReservationId { get; set; }
         public int? TechnicianId { get; set; }
         public decimal TechnicianShare { get; set; }

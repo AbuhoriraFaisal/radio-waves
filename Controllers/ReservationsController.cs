@@ -1,13 +1,11 @@
-using System.Diagnostics;
+
 using Microsoft.AspNetCore.Mvc;
 using radio_waves.Models;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
-using System.Threading.Tasks;
 using radio_waves.Data;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using NuGet.Versioning;
+using radio_waves.Reports;
+using QuestPDF.Fluent;
 
 namespace radio_waves.Controllers
 {
@@ -21,15 +19,69 @@ namespace radio_waves.Controllers
         {
             _context = context;
         }
-
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Print(string? searchString, DateTime? fromDate, DateTime? toDate)
         {
-            var reservations = await _context.Reservations.Include(r => r.RadiologyType)
+            var query = _context.Reservations
                 .Include(r => r.Patient)
+                .Include(r => r.RadiologyType)
                 .Include(r => r.Technician)
-                .ToListAsync();
-            return View(reservations);
+                .AsNoTracking();
+
+            if (!string.IsNullOrEmpty(searchString))
+                query = query.Where(r => r.Patient.FullName.Contains(searchString) 
+                || r.Technician.FullName.Contains(searchString));
+
+            if (fromDate.HasValue)
+                query = query.Where(r => r.AppointmentDate >= fromDate.Value);
+
+            if (toDate.HasValue)
+                query = query.Where(r => r.AppointmentDate <= toDate.Value);
+
+            var reservations = await query.ToListAsync();
+
+            var report = new ReservationReport(reservations, searchString, fromDate, toDate);
+            var pdf = report.GeneratePdf();
+
+            return File(pdf, "application/pdf", "reservations.pdf");
         }
+
+        public async Task<IActionResult> Index(string searchString, DateTime? fromDate, DateTime? toDate)
+        {
+            var query = _context.Reservations
+                .Include(r => r.Patient)
+                .Include(r => r.RadiologyType)
+                .Include(r => r.Technician)
+                .AsNoTracking()
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                query = query.Where(r => r.Patient.FullName.Contains(searchString) 
+                                || r.Technician.FullName.Contains(searchString));
+            }
+
+            if (fromDate.HasValue)
+            {
+                query = query.Where(r => r.AppointmentDate >= fromDate.Value);
+            }
+
+            if (toDate.HasValue)
+            {
+                query = query.Where(r => r.AppointmentDate <= toDate.Value);
+            }
+
+            var results = await query.ToListAsync();
+            return View(results);
+        }
+
+        //public async Task<IActionResult> Index()
+        //{
+        //    var reservations = await _context.Reservations.Include(r => r.RadiologyType)
+        //        .Include(r => r.Patient)
+        //        .Include(r => r.Technician)
+        //        .ToListAsync();
+        //    return View(reservations);
+        //}
         public async Task<IActionResult> Details(int id)
         {
             var reservations = await _context.Reservations.Include(r => r.RadiologyType)
@@ -101,7 +153,7 @@ namespace radio_waves.Controllers
                     if (reservation.CoveredByInsurance)
                     {
                         d.Amount = d.Amount - (decimal)((double)reservation.BasePrice * insurneCompany.CoveragedPercentage / 100.0);
-                        d.TechnicianShare = d.Amount * (decimal)(shift.TechnicianPercentage / 100.0);
+                        d.TechnicianShare = 0;// d.Amount * (decimal)(shift.TechnicianPercentage / 100.0);
                     }
                     _context.Add(d);
                     await _context.SaveChangesAsync();
@@ -117,8 +169,8 @@ namespace radio_waves.Controllers
                         InsuranceAmount = (decimal)((double)reservation.BasePrice * insurneCompany.CoveragedPercentage / 100.0),
                         PaidAmount = reservation.PaiedAmount,
                         PolicyNumber = "1234567",
-                        ProviderId = reservation.InsuranceId,
-                        TechnicianShare = (decimal)((double)reservation.BasePrice * insurneCompany.CoveragedPercentage / 100.0) * (decimal)(shift.TechnicianPercentage / 100.0),
+                        CompanyId = reservation.InsuranceId,
+                        TechnicianShare = 0,//(decimal)((double)reservation.BasePrice * insurneCompany.CoveragedPercentage / 100.0) * (decimal)(shift.TechnicianPercentage / 100.0),
                         TechnicianId = reservation.TechnicianId
                     };
                     _context.Add(I);

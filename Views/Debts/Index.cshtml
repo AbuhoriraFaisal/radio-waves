@@ -22,14 +22,14 @@
                 @Html.DisplayNameFor(model => model.ReservationId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TechnicianId)
+                @Html.DisplayNameFor(model => model.Technician.FullName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.TechnicianShare)
             </th>
-            <th>
+            @* <th>
                 @Html.DisplayNameFor(model => model.Comments)
-            </th>
+            </th> *@
             <th>
                 @Html.DisplayNameFor(model => model.Amount)
             </th>
@@ -52,20 +52,20 @@
                 @Html.DisplayFor(modelItem => item.Id)
             </td> *@
             <td>
-                @Html.DisplayFor(modelItem => item.PatientId)
+                @Html.DisplayFor(modelItem => item.Patient.FullName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ReservationId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TechnicianId)
+                @Html.DisplayFor(modelItem => item.Technician.FullName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.TechnicianShare)
             </td>
-            <td>
+            @* <td>
                 @Html.DisplayFor(modelItem => item.Comments)
-            </td>
+            </td> *@
             <td>
                 @Html.DisplayFor(modelItem => item.Amount)
             </td>

@@ -8,7 +8,7 @@ namespace radio_waves.Models
         public int Id { get; set; }
         [Required]
 
-        [Display(Name = "Patient Name")]
+        [Display(Name = "Patient")]
         public string FullName { get; set; }
         [Required]
         public string Phone { get; set; }

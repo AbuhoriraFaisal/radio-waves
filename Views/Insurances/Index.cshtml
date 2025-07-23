@@ -2,18 +2,35 @@
 
 @{
     ViewData["Title"] = "Index";
+
+    var filterValue = Context.Request.Query["filter"].ToString();
 }
 
 <h1>Index</h1>
+<form asp-action="Index" method="get" class="form-inline mb-3">
+    <div class="form-group mr-2">
+        <input type="text"
+               name="filter"
+               class="form-control"
+               placeholder="Search by patient or Insurance Company Name"
+               value="@filterValue" />
+    </div>
+    <br />
+    <a asp-action="Create" class="btn btn-primary mr-2">Create New</a>
+    <button type="submit" class="btn btn-success">Filter</button>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+    <a asp-action="DownloadInsuranceReport"
+       asp-route-filter="@filterValue"
+       class="btn btn-secondary ml-2">
+        Print PDF
+    </a>
+
+</form>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ProviderId)
+                @Html.DisplayNameFor(model => model.Company.Provider)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.PatientId)
@@ -21,12 +38,12 @@
             <th>
                 @Html.DisplayNameFor(model => model.ReservationId)
             </th>
-            <th>
+            @* <th>
                 @Html.DisplayNameFor(model => model.TechnicianId)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.TechnicianShare)
-            </th>
+            </th> *@
             <th>
                 @Html.DisplayNameFor(model => model.PaidAmount)
             </th>
@@ -39,9 +56,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.IsComplete)
             </th>
-            <th>
+           @*  <th>
                 @Html.DisplayNameFor(model => model.IsTechnicianShared)
-            </th>
+            </th> *@
             <th></th>
         </tr>
     </thead>
@@ -49,20 +66,20 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.ProviderId)
+                    @Html.DisplayFor(modelItem => item.Company.Provider)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.PatientId)
+                @Html.DisplayFor(modelItem => item.Patient.FullName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ReservationId)
             </td>
-            <td>
+           @*  <td>
                 @Html.DisplayFor(modelItem => item.TechnicianId)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.TechnicianShare)
-            </td>
+            </td> *@
             <td>
                 @Html.DisplayFor(modelItem => item.PaidAmount)
             </td>
@@ -75,13 +92,14 @@
             <td>
                 @Html.DisplayFor(modelItem => item.IsComplete)
             </td>
-            <td>
+           @*  <td>
                 @Html.DisplayFor(modelItem => item.IsTechnicianShared)
-            </td>
+            </td> *@
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                @* <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> | *@
                     @* <a asp-action="MarkAsTechnicianShared" asp-route-id="@item.Id">Technician Shared</a> | *@
                     <a asp-action="MarkAsComplete" asp-route-id="@item.Id">Complete</a>
+
             </td>
         </tr>
 }

@@ -1,13 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-//using ImagingLabApp.Models;
 using radio_waves.Models;
-using System.Collections.Generic;
-//using System.Data.Entity;
-using Microsoft.EntityFrameworkCore;
 namespace radio_waves.Data
 {
-   
+
 
     public class ApplicationDbContext : IdentityDbContext
     {
@@ -26,11 +22,18 @@ namespace radio_waves.Data
         public DbSet<InsuranceCompanies> InsuranceCompanies { get; set; }
         public DbSet<TechnicianSettlement> TechnicianSettlements { get; set; }
         public DbSet<Partner> Partners { get; set; }
-        
+        public DbSet<PartnerServices> PartnerServices { get; set; }
+
         public DbSet<InsuranceCompanySettlement> InsuranceCompanySettlements { get; set; }
 
         //public DbSetTechnicianSettlement> TechnicianSettlements { get; set; } = default!;
-   
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            builder.Entity<PartnerServices>()
+    .HasIndex(ps => new { ps.PartnerId, ps.ServiceId })
+    .IsUnique();
+        }
 
 
     }

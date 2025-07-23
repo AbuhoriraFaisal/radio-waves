@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using QuestPDF.Fluent;
 using radio_waves.Data;
 using radio_waves.Models;
+using radio_waves.Reports;
 
 namespace radio_waves.Controllers
 {
@@ -20,10 +22,21 @@ namespace radio_waves.Controllers
         }
 
         // GET: Insurances
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? filter)
         {
-            return View(await _context.Insurances.ToListAsync());
+            var query = _context.Insurances.Include(i => i.Patient).Include(i=>i.Company).AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(filter))
+            {
+                query = query.Where(i =>
+                    (i.Patient != null && i.Patient.FullName.Contains(filter)) ||
+                    (i.Company.Provider != null && i.Company.Provider.Contains(filter)));
+            }
+
+            var result = await query.ToListAsync();
+            return View(result);
         }
+
 
         // GET: Insurances/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -172,5 +185,27 @@ namespace radio_waves.Controllers
         {
             return _context.Insurances.Any(e => e.Id == id);
         }
+
+        public IActionResult DownloadInsuranceReport(string? filter)
+        {
+            var query = _context.Insurances.Include(i => i.Patient).AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(filter))
+            {
+                query = query.Where(i =>
+                    (i.Patient != null && i.Patient.FullName.Contains(filter)) ||
+                    (i.Company.Provider != null && i.Company.Provider.Contains(filter)));
+            }
+
+            var list = query.ToList();
+            var report = new InsuranceReport(list, filter);
+
+            var stream = new MemoryStream();
+            report.GeneratePdf(stream);
+            stream.Position = 0;
+
+            return File(stream, "application/pdf", "InsuranceReport.pdf");
+        }
+
     }
 }

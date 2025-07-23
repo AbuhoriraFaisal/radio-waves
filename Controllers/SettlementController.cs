@@ -24,7 +24,7 @@ namespace radio_waves.Controllers
             {
 
                 var reservations = await _context.Reservations
-                    .Where(r => r.TechnicianId == tech.Id && !r.IsTechnicianShared &&!r.IsCanceled)
+                    .Where(r => r.TechnicianId == tech.Id && !r.IsTechnicianShared && !r.IsCanceled)
                     .ToListAsync(); // Pull data into memory
                 //try to check the git hub
 
@@ -74,45 +74,45 @@ namespace radio_waves.Controllers
                 return RedirectToAction(nameof(TechniciansSettlement));
 
             await using var transaction = await _context.Database.BeginTransactionAsync();
-                try
-                {
-                    // 1. Update Insurance
-                    await _context.Insurances
-                .Where(r => r.IsComplete && !r.IsTechnicianShared && !r.IsSealed && !r.IsCanceled)
+            try
+            {
+                // 1. Update Insurance
+                await _context.Insurances
+            .Where(r => r.IsComplete && !r.IsTechnicianShared && !r.IsSealed && !r.IsCanceled)
+            .ExecuteUpdateAsync(setters => setters
+            .SetProperty(r => r.IsTechnicianShared, true));
+                //Update Debts
+                await _context.Debts
+                .Where(r => !r.IsTechnicianShared && r.IsPaid && !r.IsSealed && !r.IsCanceled)
                 .ExecuteUpdateAsync(setters => setters
                 .SetProperty(r => r.IsTechnicianShared, true));
-                //Update Debts
-                    await _context.Debts
-                    .Where(r => !r.IsTechnicianShared && r.IsPaid && !r.IsSealed && !r.IsCanceled)
-                    .ExecuteUpdateAsync(setters => setters
-                    .SetProperty(r => r.IsTechnicianShared, true));
 
                 //Updtae Reservation
                 await _context.Reservations.Where(r => !r.IsTechnicianShared && !r.IsSealed && !r.IsCanceled)
                                            .ExecuteUpdateAsync(s => s.SetProperty(r => r.IsTechnicianShared,
                                            true));
 
-                    await _context.TechnicianSettlements.AddRangeAsync(Settlements);
-                    await _context.SaveChangesAsync();
+                await _context.TechnicianSettlements.AddRangeAsync(Settlements);
+                await _context.SaveChangesAsync();
 
                 // 4. Commit all if successful
                 await transaction.CommitAsync();
 
             }
-                catch (Exception ex)
-                {
-                    // 5. Rollback on error
-                    await transaction.RollbackAsync();
+            catch (Exception ex)
+            {
+                // 5. Rollback on error
+                await transaction.RollbackAsync();
 
-                    // Optional: log error or return to error page
-                    ModelState.AddModelError("", "An error occurred while saving the settlements.");
-                    return RedirectToAction(nameof(TechnicianSummary));
-                }
-
-                // Redirect to GET to prevent form resubmission
-                return RedirectToAction(nameof(TechniciansSettlement));
-
+                // Optional: log error or return to error page
+                ModelState.AddModelError("", "An error occurred while saving the settlements.");
+                return RedirectToAction(nameof(TechnicianSummary));
             }
+
+            // Redirect to GET to prevent form resubmission
+            return RedirectToAction(nameof(TechniciansSettlement));
+
+        }
 
 
         [HttpGet]
@@ -133,7 +133,7 @@ namespace radio_waves.Controllers
             foreach (var company in companies)
             {
                 var insurances = await _context.Insurances
-                    .Where(i => i.ProviderId == company.Id && !i.IsComplete && !i.IsSealed && !i.IsCanceled)
+                    .Where(i => i.CompanyId == company.Id && !i.IsComplete && !i.IsSealed && !i.IsCanceled)
                     .ToListAsync();
                 if (!insurances.Any()) continue;
 
@@ -162,7 +162,7 @@ namespace radio_waves.Controllers
             try
             {
                 await _context.Insurances
-               .Where(r => r.ProviderId == insuraceCSettelment.ProviderId && !r.IsSealed && !r.IsCanceled)
+               .Where(r => r.CompanyId == insuraceCSettelment.ProviderId && !r.IsSealed && !r.IsCanceled)
                .ExecuteUpdateAsync(setters => setters
                .SetProperty(r => r.IsComplete, true));
 
@@ -213,13 +213,129 @@ namespace radio_waves.Controllers
         }
 
         /*------------------------------------------- Partner Part --------------------------------------------------------*/
-
         public async Task<IActionResult> PartnerSummary()
+        {
+            try
+            {
+                var targetDate = DateTime.Today;
+
+                var partners = await _context.Partners
+                    .AsNoTracking()
+                    .ToListAsync();
+
+                var summaries = new List<PartnerSettlement>();
+
+                // Pre-calculate total expenses
+                var totalExpenses = await _context.Expenditures
+                    .AsNoTracking()
+                    .Where(e => !e.IsSealed)
+                    .SumAsync(e => e.Amount);
+                // Load all valid expenditures with service link
+                var allExpenses = await _context.Expenditures
+                    .AsNoTracking()
+                    .Where(e => !e.IsSealed && e.RadiologyTypeId != null)
+                    .ToListAsync();
+
+                // Cache Reservations, Insurances, and Debts in memory (untracked)
+                var allReservations = await _context.Reservations
+                    .AsNoTracking()
+                    .Where(r => !r.IsSealed && !r.IsCanceled)
+                    .ToListAsync();
+
+                var allInsurances = await _context.Insurances
+                    .AsNoTracking()
+                    .Where(i => !i.IsSealed && !i.IsCanceled && i.IsComplete)
+                    .ToListAsync();
+
+                var allDebts = await _context.Debts
+                    .AsNoTracking()
+                    .Where(d => !d.IsSealed && !d.IsCanceled && d.IsPaid)
+                    .ToListAsync();
+
+                foreach (var partner in partners)
+                {
+                    decimal partnerTotalShare = 0;
+                    decimal partnerExpenseShare = 0;
+
+                    var partnerServices = await _context.PartnerServices
+                        .AsNoTracking()
+                        .Where(ps => ps.PartnerId == partner.Id)
+                        .ToListAsync();
+
+                    foreach (var ps in partnerServices)
+                    {
+                        int serviceId = ps.ServiceId;
+                        decimal percentage = ps.Amount_Percentage / 100m;
+
+                        // === EXPENSES ===
+                        var serviceExpenses = allExpenses.Where(e => e.RadiologyTypeId == serviceId);
+                        decimal serviceTotalExpense = serviceExpenses.Sum(e => e.Amount);
+                        partnerExpenseShare += serviceTotalExpense * percentage;
+                        // === RESERVATIONS ===
+                        var serviceReservations = allReservations
+                            .Where(r => r.RadiologyTypeId == serviceId);
+
+                        decimal reservationAmount = serviceReservations.Sum(r => r.PaiedAmount);
+                        decimal reservationTechShare = serviceReservations.Sum(r => r.TechnicianShare);
+                        decimal reservationNet = reservationAmount - reservationTechShare;
+
+                        // === INSURANCES ===
+                        var serviceInsurances = (from i in allInsurances
+                                                 join r in allReservations on i.ReservationId equals r.Id
+                                                 where r.RadiologyTypeId == serviceId
+                                                 select i).ToList();
+
+                        decimal insuranceAmount = serviceInsurances.Sum(i => i.InsuranceAmount);
+                        decimal insuranceTechShare = serviceInsurances.Sum(i => i.TechnicianShare);
+                        decimal insuranceNet = insuranceAmount - insuranceTechShare;
+
+                        // === DEBTS ===
+                        var serviceDebts = (from d in allDebts
+                                            join r in allReservations on d.ReservationId equals r.Id
+                                            where r.RadiologyTypeId == serviceId
+                                            select d).ToList();
+
+                        decimal debtAmount = serviceDebts.Sum(d => d.Amount);
+                        decimal debtTechShare = serviceDebts.Sum(d => d.TechnicianShare);
+                        decimal debtNet = debtAmount - debtTechShare;
+
+                        // === TOTAL SERVICE NET INCOME ===
+                        decimal serviceNet = reservationNet + insuranceNet + debtNet;
+
+                        // === PARTNER SHARE ===
+                        partnerTotalShare += serviceNet * percentage;
+                    }
+
+                    // Deduct average expense share
+                    decimal expenseShare = totalExpenses / partners.Count;
+                    decimal netPartnerAmount = partnerTotalShare - partnerExpenseShare;
+
+                    summaries.Add(new PartnerSettlement
+                    {
+                        PartnerName = partner.PartnerName,
+                        Amount = Math.Round(netPartnerAmount, 2),
+                        SettlementDate = targetDate
+                    });
+                }
+
+                ViewBag.SummaryDate = targetDate.ToShortDateString();
+                return View("PartnerSummary", summaries);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+        }
+
+        public async Task<IActionResult> OPartnerSummary()
         {
 
             var targetDate = DateTime.Today;
             var partners = await _context.Partners.ToListAsync();
             var summaries = new List<PartnerSettlement>();
+
             var reservationsPaiedamount = await _context.Reservations
                .Where(r => !r.IsSealed && !r.IsCanceled)
                .SumAsync(r => r.PaiedAmount);
@@ -253,7 +369,10 @@ namespace radio_waves.Controllers
 
             foreach (var partner in partners)
             {
-                var partnerPercentage = partner.Amount_Percentage;
+                var partnerServices = await _context.PartnerServices
+                    .Where(ps => ps.PartnerId == partner.Id)
+                    .ToListAsync();
+                var partnerPercentage = partnerServices.Sum(s => s.Amount_Percentage);
 
                 var distributable = (reservationsPaiedamount + insurancesPaiedamount + debtspaiedAmount) - (reservationsTchentionShareAmount - insurancesTchentionShareAmount - debtsTchentionShareAmount - expenses);
                 var partnerShare = distributable * (partnerPercentage / 100);
@@ -312,4 +431,4 @@ namespace radio_waves.Controllers
             return View(await _context.PartnerSettlements.ToListAsync());
         }
     }
-}   
+}

@@ -16,7 +16,10 @@
                 @Html.DisplayNameFor(model => model.PartnerName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Amount_Percentage)
+                @Html.DisplayNameFor(model => model.Comment)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Active)
             </th>
             <th></th>
         </tr>
@@ -28,11 +31,14 @@
                 @Html.DisplayFor(modelItem => item.PartnerName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Amount_Percentage)
+                @Html.DisplayFor(modelItem => item.Comment)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Active)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                @* <a asp-action="Details" asp-route-id="@item.Id">Details</a> | *@
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>

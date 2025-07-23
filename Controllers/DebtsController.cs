@@ -17,7 +17,7 @@ namespace radio_waves.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Debts.ToListAsync());
+            return View(await _context.Debts.Include(d=>d.Technician).Include(d=>d.Patient).ToListAsync());
         }
 
         public IActionResult Create()

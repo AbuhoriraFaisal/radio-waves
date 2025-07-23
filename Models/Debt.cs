@@ -6,10 +6,12 @@ namespace radio_waves.Models
     {
         public int Id { get; set; }
         public int? PatientId { get; set; }
+        [Display(Name = "Patient")]
         public Patient Patient { get; set; }
-
+        [Display(Name = "Reservation No")]
         public int? ReservationId { get; set; }
         public int? TechnicianId { get; set; }
+        public Technician Technician { get; set; }
         public decimal TechnicianShare { get; set; }
         public Reservation Reservation { get; set; }
         public string Comments { get; set; }

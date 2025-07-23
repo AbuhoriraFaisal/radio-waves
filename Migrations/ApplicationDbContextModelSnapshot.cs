@@ -268,6 +268,8 @@ namespace radio_waves.Migrations
 
                     b.HasIndex("ReservationId");
 
+                    b.HasIndex("TechnicianId");
+
                     b.ToTable("Debts");
                 });
 
@@ -286,10 +288,18 @@ namespace radio_waves.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
                     b.Property<bool>("IsSealed")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("RadiologyTypeId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("RadiologyTypeId");
 
                     b.ToTable("Expenditures");
                 });
@@ -301,6 +311,9 @@ namespace radio_waves.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("CompanyId")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("InsuranceAmount")
                         .HasColumnType("decimal(18,2)");
@@ -327,9 +340,6 @@ namespace radio_waves.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ProviderId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("ReservationId")
                         .HasColumnType("int");
 
@@ -340,6 +350,10 @@ namespace radio_waves.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("PatientId");
 
                     b.ToTable("Insurances");
                 });
@@ -409,8 +423,12 @@ namespace radio_waves.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal>("Amount_Percentage")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PartnerName")
                         .IsRequired()
@@ -419,6 +437,33 @@ namespace radio_waves.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Partners");
+                });
+
+            modelBuilder.Entity("radio_waves.Models.PartnerServices", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Amount_Percentage")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("PartnerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ServiceId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ServiceId");
+
+                    b.HasIndex("PartnerId", "ServiceId")
+                        .IsUnique();
+
+                    b.ToTable("PartnerServices");
                 });
 
             modelBuilder.Entity("radio_waves.Models.PartnerSettlement", b =>
@@ -765,9 +810,58 @@ namespace radio_waves.Migrations
                         .WithMany()
                         .HasForeignKey("ReservationId");
 
+                    b.HasOne("radio_waves.Models.Technician", "Technician")
+                        .WithMany()
+                        .HasForeignKey("TechnicianId");
+
                     b.Navigation("Patient");
 
                     b.Navigation("Reservation");
+
+                    b.Navigation("Technician");
+                });
+
+            modelBuilder.Entity("radio_waves.Models.Expenditure", b =>
+                {
+                    b.HasOne("radio_waves.Models.RadiologyType", "RadiologyType")
+                        .WithMany()
+                        .HasForeignKey("RadiologyTypeId");
+
+                    b.Navigation("RadiologyType");
+                });
+
+            modelBuilder.Entity("radio_waves.Models.Insurance", b =>
+                {
+                    b.HasOne("radio_waves.Models.InsuranceCompanies", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
+
+                    b.HasOne("radio_waves.Models.Patient", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatientId");
+
+                    b.Navigation("Company");
+
+                    b.Navigation("Patient");
+                });
+
+            modelBuilder.Entity("radio_waves.Models.PartnerServices", b =>
+                {
+                    b.HasOne("radio_waves.Models.Partner", "Partner")
+                        .WithMany()
+                        .HasForeignKey("PartnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("radio_waves.Models.RadiologyType", "Service")
+                        .WithMany()
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Partner");
+
+                    b.Navigation("Service");
                 });
 
             modelBuilder.Entity("radio_waves.Models.Payment", b =>

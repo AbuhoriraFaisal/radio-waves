@@ -5,18 +5,13 @@
 }
 
 <h1>Create</h1>
-
 <h4>Reservation</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" id="reservationForm">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            @* <div class="form-group">
-                <label asp-for="Id" class="control-label"></label>
-                <input asp-for="Id" class="form-control" />
-                <span asp-validation-for="Id" class="text-danger"></span>
-            </div> *@
+
             <div class="form-group">
                 <label asp-for="PatientId" class="control-label"></label>
                 <select asp-for="PatientId" class="form-control" asp-items="ViewBag.Patients">
@@ -24,11 +19,13 @@
                 </select>
                 <span asp-validation-for="PatientId" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="AppointmentDate" class="control-label"></label>
                 <input asp-for="AppointmentDate" class="form-control" />
                 <span asp-validation-for="AppointmentDate" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="RadiologyTypeId" class="control-label"></label>
                 <select asp-for="RadiologyTypeId" class="form-control" asp-items="ViewBag.RadiologyTypesSelectList" id="RadiologyTypeId">
@@ -36,7 +33,6 @@
                 </select>
                 <span asp-validation-for="RadiologyTypeId" class="text-danger"></span>
             </div>
-
 
             <div class="form-group">
                 <label asp-for="TechnicianId" class="control-label"></label>
@@ -59,33 +55,32 @@
                 <input asp-for="BasePrice" class="form-control" id="BasePrice" readonly />
                 <span asp-validation-for="BasePrice" class="text-danger"></span>
             </div>
+
             <div class="form-group form-check">
-                <input class="form-check-input" asp-for="IsDebt" />
-                <label class="form-check-label" asp-for="IsDebt"></label>
+                <input class="form-check-input" asp-for="IsDebt" id="IsDebt" />
+                <label class="form-check-label" for="IsDebt">
+                    <span id="IsDebtLabel">Is Debt</span>
+                </label>
             </div>
+
             <div class="form-group form-check">
-                <input class="form-check-input" asp-for="IsCommission" />
-                <label class="form-check-label" asp-for="IsCommission"></label>
+                <input class="form-check-input" asp-for="IsCommission" id="IsCommission" />
+                <label class="form-check-label" for="IsCommission">
+                    <span id="IsCommissionLabel">Is Commission</span>
+                </label>
             </div>
+
             <div class="form-group">
                 <label asp-for="PaiedAmount" class="control-label"></label>
                 <input asp-for="PaiedAmount" class="form-control" id="PaiedAmount" />
                 <span asp-validation-for="PaiedAmount" class="text-danger"></span>
             </div>
 
-           @*  <div class="form-group form-check">
-                <input class="form-check-input" asp-for="IsSealed" />
-                <label class="form-check-label" asp-for="IsSealed"></label>
-            </div>
             <div class="form-group form-check">
-                <input class="form-check-input" asp-for="IsCanceled" />
-                <label class="form-check-label" asp-for="IsCanceled"></label>
-            </div> *@
-
-            <div class="form-group form-check">
-                <input class="form-check-input" asp-for="CoveredByInsurance" />
+                <input class="form-check-input" asp-for="CoveredByInsurance" id="CoveredByInsurance" />
                 <label class="form-check-label" asp-for="CoveredByInsurance"></label>
             </div>
+
             <div class="form-group" id="insuranceDropdown" style="display:none;">
                 <label asp-for="InsuranceId" class="control-label"></label>
                 <select asp-for="InsuranceId" class="form-control" asp-items="ViewBag.InsuranceCompanies" id="InsuranceId">
@@ -93,6 +88,7 @@
                 </select>
                 <span asp-validation-for="InsuranceId" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="TechnicianShare" class="control-label"></label>
                 <input asp-for="TechnicianShare" class="form-control" id="TechnicianShare" readonly />
@@ -110,83 +106,126 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
+<style>
+    .disabled-label {
+        color: #999;
+        cursor: not-allowed;
+    }
+</style>
+
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 
-    <script>
-        const radiologyTypes = @Html.Raw(Json.Serialize(ViewBag.RadiologyTypesJson));
-        const shifts = @Html.Raw(Json.Serialize(ViewBag.ShiftsJson));
-        const insurances = @Html.Raw(Json.Serialize(ViewBag.InsuranceCompaniesJson));
+        <script>
+            const radiologyTypes = @Html.Raw(Json.Serialize(ViewBag.RadiologyTypesJson));
+            const shifts = @Html.Raw(Json.Serialize(ViewBag.ShiftsJson));
+            const insurances = @Html.Raw(Json.Serialize(ViewBag.InsuranceCompaniesJson));
 
-        const basePriceInput = document.getElementById("BasePrice");
-        const totalPriceInput = document.getElementById("PaiedAmount");
-        const technicianShareInput = document.getElementById("TechnicianShare");
-        const insuranceCheckbox = document.getElementById("CoveredByInsurance");
-        const insuranceDropdown = document.getElementById("insuranceDropdown");
-        const insuranceSelect = document.getElementById("InsuranceId");
+            const basePriceInput = document.getElementById("BasePrice");
+            const totalPriceInput = document.getElementById("PaiedAmount");
+            const technicianShareInput = document.getElementById("TechnicianShare");
+            const insuranceCheckbox = document.getElementById("CoveredByInsurance");
+            const insuranceDropdown = document.getElementById("insuranceDropdown");
+            const insuranceSelect = document.getElementById("InsuranceId");
+            const isDebtCheckbox = document.getElementById("IsDebt");
+            const isCommissionCheckbox = document.getElementById("IsCommission");
+            const isDebtLabel = document.getElementById("IsDebtLabel");
+            const isCommissionLabel = document.getElementById("IsCommissionLabel");
+            const form = document.getElementById("reservationForm");
 
-                function updateTechnicianShare() {
-            const total = parseFloat(totalPriceInput.value) || 0;
-            const basePrice = parseFloat(basePriceInput.value) || 0;
-            const shiftId = document.getElementById("ShiftId").value;
-            const shift = shifts.find(s => s.id == shiftId);
+            function updateTechnicianShare() {
+                const paid = parseFloat(totalPriceInput.value) || 0;
+                const shiftId = document.getElementById("ShiftId").value;
+                const shift = shifts.find(s => s.id == shiftId);
 
-            if (shift) {
-                // If CoveredByInsurance is checked, use basePrice; else use totalPrice
-                const useBasePrice = insuranceCheckbox.checked;
-                //const priceForShare = useBasePrice ? basePrice : total;
-                const priceForShare = useBasePrice ? total : total;
-                const share = priceForShare * (shift.technicianPercentage / 100);
-                technicianShareInput.value = share.toFixed(2);
-            } else {
-                technicianShareInput.value = "";
+                if (shift) {
+                    const share = paid * (shift.technicianPercentage / 100);
+                    technicianShareInput.value = share.toFixed(2);
+                } else {
+                    technicianShareInput.value = "";
+                }
             }
-        }
 
+            function updateDebtAndCommissionState() {
+                const hasInsurance = insuranceSelect.value;
 
-        document.getElementById("RadiologyTypeId").addEventListener("change", function () {
-            const selected = radiologyTypes.find(r => r.id == this.value);
-            if (selected) {
-                basePriceInput.value = selected.price;
-                totalPriceInput.value = selected.price;
-                updateTechnicianShare();
-            } else {
-                basePriceInput.value = "";
-                totalPriceInput.value = "";
-                technicianShareInput.value = "";
+                if (hasInsurance) {
+                    isDebtCheckbox.checked = false;
+                    isCommissionCheckbox.checked = false;
+
+                    isDebtCheckbox.disabled = true;
+                    isCommissionCheckbox.disabled = true;
+
+                    isDebtLabel.classList.add("disabled-label");
+                    isCommissionLabel.classList.add("disabled-label");
+
+                    isDebtLabel.title = "Disabled because insurance is selected.";
+                    isCommissionLabel.title = "Disabled because insurance is selected.";
+                } else {
+                    isDebtCheckbox.disabled = false;
+                    isCommissionCheckbox.disabled = false;
+
+                    isDebtLabel.classList.remove("disabled-label");
+                    isCommissionLabel.classList.remove("disabled-label");
+
+                    isDebtLabel.title = "";
+                    isCommissionLabel.title = "";
+                }
             }
-        });
 
-        document.getElementById("PaiedAmount").addEventListener("input", updateTechnicianShare);
-        document.getElementById("ShiftId").addEventListener("change", updateTechnicianShare);
+            document.getElementById("RadiologyTypeId").addEventListener("change", function () {
+                const selected = radiologyTypes.find(r => r.id == this.value);
+                if (selected) {
+                    basePriceInput.value = selected.price;
+                    totalPriceInput.value = selected.price;
+                    updateTechnicianShare();
+                } else {
+                    basePriceInput.value = "";
+                    totalPriceInput.value = "";
+                    technicianShareInput.value = "";
+                }
+            });
 
-        insuranceCheckbox.addEventListener("change", function () {
-            insuranceDropdown.style.display = this.checked ? "block" : "none";
-            if (!this.checked) {
-                insuranceSelect.value = "";
+            totalPriceInput.addEventListener("input", updateTechnicianShare);
+            document.getElementById("ShiftId").addEventListener("change", updateTechnicianShare);
+            isDebtCheckbox.addEventListener("change", updateTechnicianShare);
+            isCommissionCheckbox.addEventListener("change", updateTechnicianShare);
+
+            insuranceCheckbox.addEventListener("change", function () {
+                const show = this.checked;
+                insuranceDropdown.style.display = show ? "block" : "none";
+
+                if (!show) {
+                    insuranceSelect.value = "";
+                    totalPriceInput.value = basePriceInput.value;
+                    updateDebtAndCommissionState();
+                    updateTechnicianShare();
+                }
+            });
+
+            insuranceSelect.addEventListener("change", function () {
+                const selected = insurances.find(i => i.id == this.value);
                 const basePrice = parseFloat(basePriceInput.value) || 0;
-                totalPriceInput.value = basePrice.toFixed(2);
-                updateTechnicianShare();
-            }
-        });
 
-        insuranceSelect.addEventListener("change", function () {
-            const selected = insurances.find(i => i.id == this.value);
-            const basePrice = parseFloat(basePriceInput.value) || 0;
+                if (selected) {
+                    const discount = basePrice * (selected.coveragedPercentage / 100);
+                    const finalPrice = basePrice - discount;
+                    totalPriceInput.value = finalPrice.toFixed(2);
+                } else {
+                    totalPriceInput.value = basePrice.toFixed(2);
+                }
 
-            if (selected) {
-                const discount = basePrice * (selected.coveragedPercentage / 100);
-                const finalPrice = basePrice - discount;
-                totalPriceInput.value = finalPrice.toFixed(2);
-                updateTechnicianShare();
-            }
-        });
+                updateDebtAndCommissionState(); // Don't update technician share
+            });
 
-    </script>
+            form.addEventListener("submit", function (e) {
+                const techShare = parseFloat(technicianShareInput.value);
+                if (isNaN(techShare) || techShare === 0) {
+                    e.preventDefault();
+                    alert("Technician share cannot be empty or zero.");
+                }
+            });
+        </script>
 }
-
-
-
-

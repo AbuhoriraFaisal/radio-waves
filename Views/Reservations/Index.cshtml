@@ -7,8 +7,30 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
 </p>
+<form asp-action="Index" method="get" class="mb-3">
+    <div class="form-inline">
+        <input type="text" name="searchString" value="@Context.Request.Query["searchString"]" class="form-control mr-2" placeholder="Search by patient name or by technician name" />
+
+        <input type="date" name="fromDate" value="@Context.Request.Query["fromDate"]" class="form-control mr-2" />
+        <input type="date" name="toDate" value="@Context.Request.Query["toDate"]" class="form-control mr-2" />
+
+        <br />
+        <a asp-action="Create" class="btn btn-primary mr-2">Create New</a>
+
+        <button type="submit" class="btn btn-success">Filter</button>
+
+        <a class="btn btn-secondary ml-2"
+           asp-action="Print"
+           asp-route-searchString="@Context.Request.Query["searchString"]"
+           asp-route-fromDate="@Context.Request.Query["fromDate"]"
+           asp-route-toDate="@Context.Request.Query["toDate"]">
+            Print PDF
+        </a>
+    </div>
+</form>
+
+
 <table class="table">
     <thead>
         <tr>
@@ -115,7 +137,7 @@
                 @Html.DisplayFor(modelItem => item.TechnicianShare)
             </td> *@
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+                @* @Html.ActionLink("Edit", "Edit", new { id=item.Id }) | *@
                 @Html.ActionLink("Details", "Details", new { id=item.Id }) |
                     @Html.ActionLink("Cancel", "Delete", new { id = item.Id })
             </td>

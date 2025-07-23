@@ -1,4 +1,6 @@
-﻿namespace radio_waves.Models
+﻿using System.ComponentModel;
+
+namespace radio_waves.Models
 {
     public class Expenditure
     {
@@ -6,7 +8,12 @@
         public string Category { get; set; }
         public decimal Amount { get; set; }
         public bool IsSealed { get; set; }
-        public DateTime Date = DateTime.Now;
+        [DisplayName("Service")]
+        public int? RadiologyTypeId { get; set; }
+        public RadiologyType? RadiologyType { get; set; }
+
+        public DateTime Date { get; set; } = DateTime.Now;
+
     }
 
 }
