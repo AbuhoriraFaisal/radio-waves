@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<IdentityUser> SignInManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -9,6 +13,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/radio_waves.styles.css" asp-append-version="true" />
 </head>
+
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
@@ -18,80 +23,102 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                       @*  <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li> *@
-                        <!-- Reservation Dropdown -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-dark" href="#" id="ReservationsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Reservations
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="ReservationsDropdown">
-                                <li><a class="dropdown-item" asp-controller="Reservations" asp-action="Create">Add Reservations</a></li>
-                                <li><a class="dropdown-item" asp-controller="Reservations" asp-action="Index">Reservations</a></li>
-                            </ul>
 
-                        </li>
-                        <!-- Paymnets Dropdown -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-dark" href="#" id="PaymnetsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Transactions
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="PaymnetsDropdown">
-                                <li><a class="dropdown-item" asp-controller="Insurances" asp-action="Index">Insurances</a></li>
-                                <li><a class="dropdown-item" asp-controller="Debts" asp-action="Index">Debts</a></li>
-                                <li><a class="dropdown-item" asp-controller="Expenditures" asp-action="Index">Expenditures</a></li>
-                            
-                                @* <li><a class="dropdown-item" asp-controller="Debts" asp-action="Create">ِAdd Debts</a></li> *@
-                            </ul>
-                        </li>
-                        
-                        <!-- Configurations Dropdown -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-dark" href="#" id="shiftsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Configurations
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="shiftsDropdown">
-                                <li><a class="dropdown-item" asp-controller="RadiologyTypes" asp-action="Create">Add Service</a></li>
-                                <li><a class="dropdown-item" asp-controller="RadiologyTypes" asp-action="Index">Services</a></li>
-                                <li><a class="dropdown-item" asp-controller="InsuranceCompanies" asp-action="Create">Add Insurance Companies</a></li>
-                                <li><a class="dropdown-item" asp-controller="InsuranceCompanies" asp-action="Index">Insurance Companies</a></li>
-                                <li><a class="dropdown-item" asp-controller="Patients" asp-action="Create">Add Patient</a></li>
-                                <li><a class="dropdown-item" asp-controller="Patients" asp-action="Index">Patients</a></li>
-                                <li><a class="dropdown-item" asp-controller="Partners" asp-action="Create">Add Partner</a></li>
-                                <li><a class="dropdown-item" asp-controller="Partners" asp-action="Index">Partners</a></li>
-                                <li><a class="dropdown-item" asp-controller="Technicians" asp-action="Create">Add Technician</a></li>
-                                <li><a class="dropdown-item" asp-controller="Technicians" asp-action="Index">Technicians</a></li>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            @* Admin-only menus *@
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <!-- Settlement Dropdown -->
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle text-dark" href="#" id="SettelmentDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Settlements
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="SettelmentDropdown">
+                                        <li><a class="dropdown-item" asp-controller="Settlement" asp-action="InsuranceCompanySummary">Insurance Company Summary</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Settlement" asp-action="insuranceCompanysettlement">Insurance Company Settlements</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Settlement" asp-action="TechnicianSummary">Technician Summary</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Settlement" asp-action="TechniciansSettlement">Technicians Settlements</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Settlement" asp-action="PartnerSummary">Partner Summary</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Settlement" asp-action="PartnersSettlement">Partners Settlements</a></li>
+                                    </ul>
+                                </li>
 
-                                <li><a class="dropdown-item" asp-controller="Shifts" asp-action="Create">Add Shift</a></li>
-                                <li><a class="dropdown-item" asp-controller="Shifts" asp-action="Index">Shifts</a></li>
-                            </ul>
-                        </li>
-                        <!-- Settelment Dropdown -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-dark" href="#" id="SettelmentDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Settelments
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="SettelmentDropdown">
-                                <li><a class="dropdown-item" asp-controller="Settlement" asp-action="InsuranceCompanySummary">insurance Company Summary</a></li>
-                                <li><a class="dropdown-item" asp-controller="Settlement" asp-action="insuranceCompanysettlement">insurance Company settlements</a></li>
-                                <li><a class="dropdown-item" asp-controller="Settlement" asp-action="TechnicianSummary">Technician Summary</a></li>
-                                <li><a class="dropdown-item" asp-controller="Settlement" asp-action="TechniciansSettlement">Technicians Settlements</a></li>
-                                <li><a class="dropdown-item" asp-controller="Settlement" asp-action="PartnerSummary">Partner Summary</a></li>
-                                <li><a class="dropdown-item" asp-controller="Settlement" asp-action="PartnersSettlement">Partners Settlements</a></li>
-                            </ul>
+                                <!-- Configurations Dropdown -->
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle text-dark" href="#" id="shiftsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Configurations
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="shiftsDropdown">
+                                        <li><a class="dropdown-item" asp-controller="RadiologyTypes" asp-action="Create">Add Service</a></li>
+                                        <li><a class="dropdown-item" asp-controller="RadiologyTypes" asp-action="Index">Services</a></li>
+                                        <li><a class="dropdown-item" asp-controller="InsuranceCompanies" asp-action="Create">Add Insurance Companies</a></li>
+                                        <li><a class="dropdown-item" asp-controller="InsuranceCompanies" asp-action="Index">Insurance Companies</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Patients" asp-action="Create">Add Patient</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Patients" asp-action="Index">Patients</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Partners" asp-action="Create">Add Partner</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Partners" asp-action="Index">Partners</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Technicians" asp-action="Create">Add Technician</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Technicians" asp-action="Index">Technicians</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Shifts" asp-action="Create">Add Shift</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Shifts" asp-action="Index">Shifts</a></li>
+                                    </ul>
+                                </li>
+                            }
 
-                        </li>
+                            @* Receptionist-only and Admin-shared menus *@
+                            @if (User.IsInRole("Receptionist") || User.IsInRole("Admin"))
+                            {
+                                <!-- Reservation Dropdown -->
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle text-dark" href="#" id="ReservationsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Reservations
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="ReservationsDropdown">
+                                        <li><a class="dropdown-item" asp-controller="Reservations" asp-action="Create">Add Reservation</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Reservations" asp-action="Index">Reservations</a></li>
+                                    </ul>
+                                </li>
+
+                                <!-- Payments Dropdown -->
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle text-dark" href="#" id="PaymnetsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Transactions
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="PaymnetsDropdown">
+                                        <li><a class="dropdown-item" asp-controller="Insurances" asp-action="Index">Insurances</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Debts" asp-action="Index">Debts</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Expenditures" asp-action="Index">Expenditures</a></li>
+                                    </ul>
+                                </li>
+                            }
+                        }
+                    </ul>
+
+                    <ul class="navbar-nav">
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <li class="nav-item">
+                                <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                                    <button type="submit" class="nav-link btn btn-link">Logout</button>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Account" asp-action="Login">Login</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -103,6 +130,7 @@
             &copy; 2025 - radio_waves - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

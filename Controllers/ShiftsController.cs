@@ -6,10 +6,12 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using radio_waves.Data;
 using radio_waves.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace radio_waves.Controllers
 {
-    
+
+    [Authorize(Roles = "Admin")] 
 
     public class ShiftsController : Controller
     {

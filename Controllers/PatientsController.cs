@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 using radio_waves.Data;
 using radio_waves.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace radio_waves.Controllers
 {
-    
 
+    [Authorize(Roles = "Admin,Receptionist")]
     public class PatientsController : Controller
     {
         private readonly ApplicationDbContext _context;

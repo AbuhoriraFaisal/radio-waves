@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using radio_waves.Data;
@@ -8,6 +9,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace radio_waves.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class SettlementController : Controller
     {
         private readonly ApplicationDbContext _context;

@@ -6,10 +6,12 @@ using radio_waves.Data;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using radio_waves.Reports;
 using QuestPDF.Fluent;
+using Microsoft.AspNetCore.Authorization;
 
 namespace radio_waves.Controllers
 {
 
+    [Authorize(Roles = "Admin,Receptionist")] 
 
     public class ReservationsController : Controller
     {

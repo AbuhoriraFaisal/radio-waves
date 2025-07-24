@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using radio_waves.Data;
 using radio_waves.Models;
 
 namespace radio_waves.Controllers
 {
-   
 
+    [Authorize(Roles = "Admin,Receptionist")]
     public class RadiologyTypesController : Controller
     {
         private readonly ApplicationDbContext _context;
