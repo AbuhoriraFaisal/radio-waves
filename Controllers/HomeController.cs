@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using radio_waves.Models;
 
@@ -13,8 +14,20 @@ namespace radio_waves.Controllers
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            // Test Fo Github issue #1
         }
+
+        public IActionResult SetLanguage(string culture, string returnUrl = null)
+        {
+            Response.Cookies.Append(
+               CookieRequestCultureProvider.DefaultCookieName,
+               CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
+               new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
+           );
+
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+
+
 
         public IActionResult Index()
         {

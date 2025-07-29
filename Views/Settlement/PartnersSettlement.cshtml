@@ -1,47 +1,53 @@
 ﻿@model IEnumerable<radio_waves.Models.PartnerSettlement>
 
 @{
-    ViewData["Title"] = "PartnersSettlement";
+    var culture = System.Globalization.CultureInfo.CurrentCulture.Name;
+    var isArabic = culture.StartsWith("ar");
+
+    ViewData["Title"] = isArabic ? "تسويات الشركاء" : "Partners Settlement";
+
+    string pageTitle = isArabic ? "تسويات الشركاء" : "Partners Settlement";
+    string createNewLabel = isArabic ? "تسوية جديدة" : "Create New";
+    string partnerNameLabel = isArabic ? "اسم الشريك" : "Partner Name";
+    string amountLabel = isArabic ? "المبلغ" : "Amount";
+    string settlementDateLabel = isArabic ? "تاريخ التسوية" : "Settlement Date";
+    string editLabel = isArabic ? "تعديل" : "Edit";
+    string detailsLabel = isArabic ? "تفاصيل" : "Details";
+    string deleteLabel = isArabic ? "حذف" : "Delete";
 }
 
-<h1>PartnersSettlement</h1>
+<div class="container mt-4" dir="@(isArabic ? "rtl" : "ltr")">
+    <h1 class="mb-4 @(isArabic ? "text-end" : "text-start")">@pageTitle</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.PartnerName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Amount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SettlementDate)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.PartnerName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Amount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SettlementDate)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <p class="mb-3">
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> @createNewLabel
+        </a>
+    </p>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>@partnerNameLabel</th>
+                <th>@amountLabel</th>
+                <th>@settlementDateLabel</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.PartnerName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Amount)</td>
+                    <td>@Html.DisplayFor(modelItem => item.SettlementDate)</td>
+                    <td class="d-flex gap-2">
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">@editLabel</a>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info">@detailsLabel</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">@deleteLabel</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

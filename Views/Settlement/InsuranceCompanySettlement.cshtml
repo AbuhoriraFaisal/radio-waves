@@ -1,48 +1,40 @@
 ﻿@model IEnumerable<radio_waves.Models.InsuranceCompanySettlement>
 
 @{
-    ViewData["Title"] = "InsuranceCompanySettlement";
+    var culture = System.Globalization.CultureInfo.CurrentCulture.Name;
+    var isArabic = culture.StartsWith("ar");
+
+    ViewData["Title"] = isArabic ? "تسويات شركات التأمين" : "Insurance Companies Settlements";
+
+    string pageTitle = isArabic ? "سجل تسويات شركات التأمين" : "Insurance Companies Settlement History";
+    string companyNameLabel = isArabic ? "اسم شركة التأمين" : "Insurance Company";
+    string totalShareLabel = isArabic ? "إجمالي حصة التأمين" : "Total Insurance Share";
+    string netPayableLabel = isArabic ? "الصافي المستحق" : "Net Payable";
+    string settlementDateLabel = isArabic ? "تاريخ التسوية" : "Settlement Date";
 }
 
-<h1>Insurances Companies Settlement History</h1>
+<div class="container mt-4" dir="@(isArabic ? "rtl" : "ltr")">
+    <h1 class="mb-4 @(isArabic ? "text-end" : "text-start")">@pageTitle</h1>
 
-
-<br />
-<br />
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.InsuranceCompanyName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TotalInsuranceShare)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NetPayable)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SettlementDate)
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.InsuranceCompanyName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalInsuranceShare)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NetPayable)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SettlementDate)
-            </td>
-            
-        </tr>
-}
-    </tbody>
-</table>
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>@companyNameLabel</th>
+                <th>@totalShareLabel</th>
+                <th>@netPayableLabel</th>
+                <th>@settlementDateLabel</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.InsuranceCompanyName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.TotalInsuranceShare)</td>
+                    <td>@Html.DisplayFor(modelItem => item.NetPayable)</td>
+                    <td>@Html.DisplayFor(modelItem => item.SettlementDate)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

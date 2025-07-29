@@ -1,48 +1,70 @@
 ﻿@model radio_waves.Models.InsuranceCompanies
 
 @{
-    ViewData["Title"] = "Create";
+    var culture = System.Globalization.CultureInfo.CurrentCulture.Name;
+    var isArabic = culture.StartsWith("ar");
+
+    ViewData["Title"] = isArabic ? "إضافة شركة تأمين" : "Create Insurance Company";
+
+    string title = isArabic ? "إضافة شركة تأمين" : "Create Insurance Company";
+    string insuranceLabel = isArabic ? "بيانات شركة التأمين" : "Insurance Company Details";
+    string providerLabel = isArabic ? "اسم الشركة" : "Provider";
+    string policyLabel = isArabic ? "رقم البوليصة" : "Policy Number";
+    string coverageLabel = isArabic ? "تفاصيل التغطية" : "Coverage Details";
+    string percentageLabel = isArabic ? "نسبة التغطية" : "Coverage %";
+    string createBtn = isArabic ? "إضافة" : "Create";
+    string backToList = isArabic ? "العودة للقائمة" : "Back to List";
 }
 
-<h1>Create</h1>
+<div class="container mt-4" >
+    <h1 class="mb-3 ">@title</h1>
+    <h4 class="mb-4  text-muted">@insuranceLabel</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-6">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
-<h4>InsuranceCompanies</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Provider" class="control-label"></label>
-                <input asp-for="Provider" class="form-control" />
-                <span asp-validation-for="Provider" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PolicyNumber" class="control-label"></label>
-                <input asp-for="PolicyNumber" class="form-control" />
-                <span asp-validation-for="PolicyNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CoverageDetails" class="control-label"></label>
-                <input asp-for="CoverageDetails" class="form-control" />
-                <span asp-validation-for="CoverageDetails" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CoveragedPercentage" class="control-label"></label>
-                <input asp-for="CoveragedPercentage" class="form-control" />
-                <span asp-validation-for="CoveragedPercentage" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+                <div class="mb-3">
+                    <label asp-for="Provider" class="form-label">@providerLabel</label>
+                    <input asp-for="Provider" class="form-control" />
+                    <span asp-validation-for="Provider" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="PolicyNumber" class="form-label">@policyLabel</label>
+                    <input asp-for="PolicyNumber" class="form-control" />
+                    <span asp-validation-for="PolicyNumber" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="CoverageDetails" class="form-label">@coverageLabel</label>
+                    <input asp-for="CoverageDetails" class="form-control" />
+                    <span asp-validation-for="CoverageDetails" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="CoveragedPercentage" class="form-label">@percentageLabel</label>
+                    <input asp-for="CoveragedPercentage" class="form-control" />
+                    <span asp-validation-for="CoveragedPercentage" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> @createBtn
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="mt-3 @(isArabic ? "text-end" : "text-start")">
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="bi bi-arrow-left-circle"></i> @backToList
+        </a>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

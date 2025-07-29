@@ -1,66 +1,66 @@
 ﻿@model IEnumerable<radio_waves.Models.InsuranceCompanySettlement>
 
 @{
-    ViewData["Title"] = "InsuranceCompanySummary";
+    var culture = System.Globalization.CultureInfo.CurrentCulture.Name;
+    var isArabic = culture.StartsWith("ar");
+
+    ViewData["Title"] = isArabic ? "ملخص تسويات شركات التأمين" : "Insurance Company Summary";
+
+    string pageTitle = isArabic ? "ملخص تسويات شركات التأمين" : "Insurance Company Settlement Summary";
+    string createNewText = isArabic ? "تسوية جديدة" : "Create New";
+    string providerIdLabel = isArabic ? "مزود الخدمة" : "Provider";
+    string companyNameLabel = isArabic ? "اسم شركة التأمين" : "Insurance Company";
+    string totalShareLabel = isArabic ? "إجمالي حصة التأمين" : "Total Insurance Share";
+    string netPayableLabel = isArabic ? "الصافي المستحق" : "Net Payable";
+    string settlementDateLabel = isArabic ? "تاريخ التسوية" : "Settlement Date";
+    string editLabel = isArabic ? "تعديل" : "Edit";
+    string settleLabel = isArabic ? "تسوية" : "Settle";
 }
 
-<h1>InsuranceCompanySummary</h1>
+<div class="container mt-4" dir="@(isArabic ? "rtl" : "ltr")">
+    <h1 class="mb-4 @(isArabic ? "text-end" : "text-start")">@pageTitle</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ProviderId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.InsuranceCompanyName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TotalInsuranceShare)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NetPayable)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SettlementDate)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProviderId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.InsuranceCompanyName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalInsuranceShare)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NetPayable)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SettlementDate)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <form asp-action="MarkAsComplete" method="post" style="display:inline;">
-                        @Html.AntiForgeryToken()
-                        <input type="hidden" name="ProviderId" value="@item.ProviderId" />
-                        <input type="hidden" name="InsuranceCompanyName" value="@item.InsuranceCompanyName" />
-                        <input type="hidden" name="TotalInsuranceShare" value="@item.TotalInsuranceShare" />
-                        <input type="hidden" name="NetPayable" value="@item.NetPayable" />
-                        <input type="hidden" name="SettlementDate" value="@item.SettlementDate.ToString("yyyy-MM-ddTHH:mm:ss")" />
-                        <button type="submit" class="btn btn-sm btn-success">Settle</button>
-                    </form>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <p class="mb-3">
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> @createNewText
+        </a>
+    </p>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>@providerIdLabel</th>
+                <th>@companyNameLabel</th>
+                <th>@totalShareLabel</th>
+                <th>@netPayableLabel</th>
+                <th>@settlementDateLabel</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.ProviderId)</td>
+                    <td>@Html.DisplayFor(modelItem => item.InsuranceCompanyName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.TotalInsuranceShare)</td>
+                    <td>@Html.DisplayFor(modelItem => item.NetPayable)</td>
+                    <td>@Html.DisplayFor(modelItem => item.SettlementDate)</td>
+                    <td class="d-flex gap-2">
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">@editLabel</a>
+
+                        <form asp-action="MarkAsComplete" method="post" class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="ProviderId" value="@item.ProviderId" />
+                            <input type="hidden" name="InsuranceCompanyName" value="@item.InsuranceCompanyName" />
+                            <input type="hidden" name="TotalInsuranceShare" value="@item.TotalInsuranceShare" />
+                            <input type="hidden" name="NetPayable" value="@item.NetPayable" />
+                            <input type="hidden" name="SettlementDate" value="@item.SettlementDate.ToString("yyyy-MM-ddTHH:mm:ss")" />
+                            <button type="submit" class="btn btn-sm btn-success">@settleLabel</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

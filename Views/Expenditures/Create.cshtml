@@ -2,46 +2,69 @@
 
 @{
     ViewData["Title"] = "Create";
+
+    var culture = System.Globalization.CultureInfo.CurrentCulture.Name;
+    var isArabic = culture.StartsWith("ar");
+
+    string pageTitle = isArabic ? "إضافة مصروف" : "Add Expenditure";
+    string modelTitle = isArabic ? "بيانات المصروف" : "Expenditure Details";
+    string categoryLabel = isArabic ? "الفئة" : "Category";
+    string amountLabel = isArabic ? "المبلغ" : "Amount";
+    string isSealedLabel = isArabic ? "مختوم؟" : "Is Sealed?";
+    string radiologyTypeLabel = isArabic ? "نوع الأشعة" : "Radiology Type";
+    string createLabel = isArabic ? "إضافة" : "Create";
+    string backLabel = isArabic ? "رجوع إلى القائمة" : "Back to List";
 }
 
-<h1>Create</h1>
+<div class="container mt-4">
+    <h1 class="mb-3">@pageTitle</h1>
+    <h4 class="mb-4">@modelTitle</h4>
+    <hr />
 
-<h4>Expenditure</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Category" class="control-label"></label>
-                <input asp-for="Category" class="form-control" />
-                <span asp-validation-for="Category" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Amount" class="control-label"></label>
-                <input asp-for="Amount" class="form-control" />
-                <span asp-validation-for="Amount" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsSealed" /> @Html.DisplayNameFor(model => model.IsSealed)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="RadiologyTypeId" class="control-label"></label>
-                <select asp-for="RadiologyTypeId" class ="form-control" asp-items="ViewBag.RadiologyTypeId"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+    <div class="row">
+        <div class="col-md-8">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="mb-3">
+                    <label asp-for="Category" class="form-label">@categoryLabel</label>
+                    <input asp-for="Category" class="form-control" />
+                    <span asp-validation-for="Category" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Amount" class="form-label">@amountLabel</label>
+                    <input asp-for="Amount" class="form-control" />
+                    <span asp-validation-for="Amount" class="text-danger"></span>
+                </div>
+
+                <div class="form-check mb-3">
+                    <input class="form-check-input" asp-for="IsSealed" />
+                    <label class="form-check-label" asp-for="IsSealed">@isSealedLabel</label>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="RadiologyTypeId" class="form-label">@radiologyTypeLabel</label>
+                    <select asp-for="RadiologyTypeId" class="form-control" asp-items="ViewBag.RadiologyTypeId">
+                        <option value="">@(isArabic ? "-- اختر نوع الأشعة --" : "-- Select Radiology Type --")</option>
+                    </select>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-plus-circle"></i> @createLabel
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i> @backLabel
+                    </a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

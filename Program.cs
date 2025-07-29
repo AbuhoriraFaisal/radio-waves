@@ -2,12 +2,20 @@ using Microsoft.EntityFrameworkCore;
 using radio_waves.Data;
 using QuestPDF.Infrastructure;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
+using Microsoft.AspNetCore.Mvc.Razor;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
 
+// MVC with localization
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+builder.Services.AddMvc();
+builder.Services.AddControllersWithViews()
+    .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
+    .AddDataAnnotationsLocalization();
+// Database and Identity
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -17,9 +25,11 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 
 QuestPDF.Settings.License = LicenseType.Community;
 
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
 var app = builder.Build();
 
-// SEED ROLES AND USERS
+// Seed roles and users
 using (var scope = app.Services.CreateScope())
 {
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
@@ -35,10 +45,8 @@ using (var scope = app.Services.CreateScope())
         }
     }
 
-    // Seed Admin user
     var adminEmail = "admin@example.com";
     var adminPassword = "Admin123!";
-
     if (await userManager.FindByEmailAsync(adminEmail) is null)
     {
         var adminUser = new IdentityUser
@@ -54,10 +62,8 @@ using (var scope = app.Services.CreateScope())
         }
     }
 
-    // Seed Receptionist user
     var receptionistEmail = "reception@lab.com";
     var receptionistPassword = "Reception123!";
-
     if (await userManager.FindByEmailAsync(receptionistEmail) is null)
     {
         var receptionistUser = new IdentityUser
@@ -74,24 +80,38 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// Configure the HTTP request pipeline.
+// Middleware
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
 
+//loclization
+var supportedCultures = new List<CultureInfo>
+{
+    new CultureInfo("en"),
+    new CultureInfo("ar")
+};
+var localizationOptions = new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture("en"),
+    SupportedCultures = supportedCultures,
+    SupportedUICultures = supportedCultures
+};
+
+app.UseRequestLocalization(localizationOptions);
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-app.UseRouting();
 
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Set default route to login page
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Account}/{action=Login}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

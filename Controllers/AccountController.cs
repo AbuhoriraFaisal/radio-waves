@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Localization;
 using radio_waves.Models;
+using System;
 using System.Threading.Tasks;
 
 public class AccountController : Controller
@@ -13,14 +15,16 @@ public class AccountController : Controller
     }
 
     [HttpGet]
-    public IActionResult Login(string returnUrl = null)
+    public IActionResult Login()
     {
-        ViewData["ReturnUrl"] = returnUrl;
+        
+
         return View();
     }
 
+
     [HttpPost]
-    public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
+    public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null, string culture = null)
     {
         if (!ModelState.IsValid)
             return View(model);
@@ -29,6 +33,16 @@ public class AccountController : Controller
 
         if (result.Succeeded)
         {
+            // Set culture cookie to preserve language
+            if (!string.IsNullOrEmpty(culture))
+            {
+                Response.Cookies.Append(
+                    CookieRequestCultureProvider.DefaultCookieName,
+                    CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
+                    new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
+                );
+            }
+
             return LocalRedirect(returnUrl ?? Url.Action("Index", "Home"));
         }
 

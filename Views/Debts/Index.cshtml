@@ -1,89 +1,90 @@
 ﻿@model IEnumerable<radio_waves.Models.Debt>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Debts";
+
+    var culture = System.Globalization.CultureInfo.CurrentCulture.Name;
+    var isArabic = culture.StartsWith("ar");
+
+    string title = isArabic ? "ديون المرضى" : "Patients Debts";
+    string patientLabel = isArabic ? "اسم المريض" : "Patient Name";
+    string reservationLabel = isArabic ? "رقم الحجز" : "Reservation ID";
+    string technicianLabel = isArabic ? "اسم الفني" : "Technician";
+    string shareLabel = isArabic ? "نسبة الفني" : "Technician Share";
+    string amountLabel = isArabic ? "المبلغ" : "Amount";
+    string dueLabel = isArabic ? "تاريخ الاستحقاق" : "Due Date";
+    string paidLabel = isArabic ? "مدفوع؟" : "Is Paid";
+    string sharedLabel = isArabic ? "تم مشاركة الفني؟" : "Technician Shared?";
+    string actionLabel = isArabic ? "الإجراء" : "Action";
+    string markPaidLabel = isArabic ? "تم الدفع" : "Mark as Paid";
+    string noDataLabel = isArabic ? "لا توجد ديون حالياً" : "No debts available";
 }
 
-<h1>Patients Debts</h1>
+<div class="container mt-4">
+    <h1 class="mb-3">@title</h1>
 
-@* <p>
-    <a asp-action="Create">Create New</a>
-</p> *@
-<table class="table">
-    <thead>
-        <tr>
-           @*  <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th> *@
-            <th>
-                @Html.DisplayNameFor(model => model.Patient.FullName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ReservationId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Technician.FullName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TechnicianShare)
-            </th>
-            @* <th>
-                @Html.DisplayNameFor(model => model.Comments)
-            </th> *@
-            <th>
-                @Html.DisplayNameFor(model => model.Amount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DueDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsPaid)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsTechnicianShared)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            @* <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td> *@
-            <td>
-                @Html.DisplayFor(modelItem => item.Patient.FullName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReservationId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Technician.FullName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TechnicianShare)
-            </td>
-            @* <td>
-                @Html.DisplayFor(modelItem => item.Comments)
-            </td> *@
-            <td>
-                @Html.DisplayFor(modelItem => item.Amount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DueDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsPaid)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsTechnicianShared)
-            </td>
-            <td>
-                    @* @Html.ActionLink("Edit", "Edit", new { id = item.Id }) | *@
-                    @* @Html.ActionLink("MarkAsTechnicianShared", "MarkAsTechnicianShared", new { id = item.Id }) | *@
-                    @Html.ActionLink("MarkAsPaid", "MarkAsPaid", new { id=item.Id })
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <table class="table table-bordered table-striped">
+        <thead class="table-light text-center">
+            <tr>
+                <th>@patientLabel</th>
+                <th>@reservationLabel</th>
+                <th>@technicianLabel</th>
+                <th>@shareLabel</th>
+                <th>@amountLabel</th>
+                <th>@dueLabel</th>
+                <th>@paidLabel</th>
+                <th>@sharedLabel</th>
+                <th>@actionLabel</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="9" class="text-center text-muted">@noDataLabel</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var item in Model)
+                {
+                    <tr class="text-center align-middle">
+                        <td>@item.Patient.FullName</td>
+                        <td>@item.ReservationId</td>
+                        <td>@item.Technician.FullName</td>
+                        <td>@item.TechnicianShare</td>
+                        <td>@item.Amount</td>
+                        <td>@item.DueDate.ToShortDateString()</td>
+                        <td>
+                            @if (item.IsPaid)
+                            {
+                                <span class="text-success">✅</span>
+                            }
+                            else
+                            {
+                                <span class="text-danger">❌</span>
+                            }
+                        </td>
+                        <td>
+                            @if (item.IsTechnicianShared)
+                            {
+                                <span class="text-success">✅</span>
+                            }
+                            else
+                            {
+                                <span class="text-danger">❌</span>
+                            }
+                        </td>
+                        <td>
+                            <a asp-action="MarkAsPaid"
+                               asp-route-id="@item.Id"
+                               class="btn btn-sm btn-outline-success">
+                                @markPaidLabel
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

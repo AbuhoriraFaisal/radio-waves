@@ -1,73 +1,91 @@
 ﻿@model radio_waves.Models.Patient
 
 @{
-    ViewData["Title"] = "Create";
+    var culture = System.Globalization.CultureInfo.CurrentCulture.Name;
+    var isArabic = culture.StartsWith("ar");
+
+    ViewData["Title"] = isArabic ? "إضافة مريض" : "Create Patient";
+
+    string title = isArabic ? "إضافة مريض" : "Create Patient";
+    string nameLabel = isArabic ? "الاسم الكامل" : "Full Name";
+    string phoneLabel = isArabic ? "رقم الهاتف" : "Phone";
+    string hasInsuranceLabel = isArabic ? "هل لديه تأمين؟" : "Has Insurance?";
+    string insuranceLabel = isArabic ? "شركة التأمين" : "Insurance Company";
+    string submitText = isArabic ? "إضافة" : "Create";
+    string backText = isArabic ? "العودة للقائمة" : "Back to List";
+    string selectInsurance = isArabic ? "-- اختر التأمين --" : "-- Select Insurance --";
 }
 
-<h1>Create</h1>
+<div class="container mt-4" dir="@(isArabic ? "rtl" : "ltr")">
+    <h1 class="mb-4 @(isArabic ? "text-end" : "text-start")">@title</h1>
 
-<h4>Patient</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-           @*  <div class="form-group">
-                <label asp-for="Id" class="control-label"></label>
-                <input asp-for="Id" class="form-control" />
-                <span asp-validation-for="Id" class="text-danger"></span>
-            </div> *@
-            <div class="form-group">
-                <label asp-for="FullName" class="control-label"></label>
-                <input asp-for="FullName" class="form-control" />
-                <span asp-validation-for="FullName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Phone" class="control-label"></label>
-                <input asp-for="Phone" class="form-control" />
-                <span asp-validation-for="Phone" class="text-danger"></span>
-            </div>
-            @* <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="HasInsurance" /> @Html.DisplayNameFor(model => model.HasInsurance)
-                </label>
-            </div> *@
-            @* <div class="form-group">
-                <label asp-for="InsuranceId">Insurance</label>
-                <select asp-for="InsuranceId" asp-items="ViewBag.Insurances" class="form-control">
-                    <option value="">-- Select Insurance --</option>
-                </select>
+    <div class="row">
+        <div class="col-md-6">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-                <span asp-validation-for="InsuranceId" class="text-danger"></span>
-            </div> *@
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+                <div class="form-group mb-3">
+                    <label asp-for="FullName" class="form-label">@nameLabel</label>
+                    <input asp-for="FullName" class="form-control" />
+                    <span asp-validation-for="FullName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Phone" class="form-label">@phoneLabel</label>
+                    <input asp-for="Phone" class="form-control" />
+                    <span asp-validation-for="Phone" class="text-danger"></span>
+                </div>
+
+                @* Uncomment this section if using insurance fields *@
+                @* 
+                <div class="form-check mb-3">
+                    <input class="form-check-input" asp-for="HasInsurance" id="HasInsurance" />
+                    <label class="form-check-label" for="HasInsurance">@hasInsuranceLabel</label>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="InsuranceId" class="form-label">@insuranceLabel</label>
+                    <select asp-for="InsuranceId" asp-items="ViewBag.Insurances" class="form-control" id="InsuranceId" disabled>
+                        <option value="">@selectInsurance</option>
+                    </select>
+                    <span asp-validation-for="InsuranceId" class="text-danger"></span>
+                </div>
+                *@
+
+                <div class="form-group mt-3">
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-plus-circle"></i> @submitText
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary ms-2">
+                        <i class="bi bi-arrow-left-circle"></i> @backText
+                    </a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
     <script>
-        $(document).ready(function () {
-            function toggleInsuranceDropdown() {
-                if ($("#HasInsurance").is(":checked")) {
-                    $("#InsuranceId").prop("disabled", false);
-                } else {
-                    $("#InsuranceId").val("").prop("disabled", true);
+        document.addEventListener("DOMContentLoaded", function () {
+            const hasInsuranceCheckbox = document.getElementById("HasInsurance");
+            const insuranceDropdown = document.getElementById("InsuranceId");
+
+            if (hasInsuranceCheckbox && insuranceDropdown) {
+                function toggleDropdown() {
+                    insuranceDropdown.disabled = !hasInsuranceCheckbox.checked;
+                    if (!hasInsuranceCheckbox.checked) {
+                        insuranceDropdown.value = "";
+                    }
                 }
+
+                hasInsuranceCheckbox.addEventListener("change", toggleDropdown);
+                toggleDropdown(); // Initial on load
             }
-
-            toggleInsuranceDropdown();
-
-            $("#HasInsurance").change(function () {
-                toggleInsuranceDropdown();
-            });
         });
     </script>
 }

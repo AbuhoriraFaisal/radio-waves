@@ -1,49 +1,55 @@
 ﻿@model IEnumerable<radio_waves.Models.RadiologyType>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Radiology Types";
+
+    var culture = System.Globalization.CultureInfo.CurrentCulture.Name;
+    var isArabic = culture.StartsWith("ar");
+
+    string pageTitle = isArabic ? "أنواع الأشعة" : "Radiology Types";
+    string nameLabel = isArabic ? "الاسم" : "Name";
+    string descriptionLabel = isArabic ? "الوصف" : "Description";
+    string priceLabel = isArabic ? "السعر" : "Price";
+    string createLabel = isArabic ? "إضافة نوع جديد" : "Create New";
+    string editLabel = isArabic ? "تعديل" : "Edit";
+    string deleteLabel = isArabic ? "حذف" : "Delete";
 }
 
-<h1>Index</h1>
+<div class="container mt-4">
+    <h1 class="mb-4">@pageTitle</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            @* <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th> *@
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-          @*   <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td> *@
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td> 
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <p class="mb-3">
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> @createLabel
+        </a>
+    </p>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-light">
+            <tr class="text-center">
+                <th>@nameLabel</th>
+                <th>@descriptionLabel</th>
+                <th>@priceLabel</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                    <td>@String.Format("{0:0.00}", item.Price)</td>
+                    <td class="text-center">
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning me-2">
+                            <i class="bi bi-pencil"></i> @editLabel
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">
+                            <i class="bi bi-trash"></i> @deleteLabel
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

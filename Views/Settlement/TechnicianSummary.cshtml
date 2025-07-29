@@ -1,161 +1,103 @@
 ﻿@model IEnumerable<radio_waves.Models.TechnicianSettlement>
 
 @{
-    ViewData["Title"] = "TechnicianSummary";
-    var settlements = Model.ToList();
+    var culture = System.Globalization.CultureInfo.CurrentCulture.Name;
+    var isArabic = culture.StartsWith("ar");
+
+    ViewData["Title"] = isArabic ? "ملخص الفنيين" : "Technician Summary";
+
+    string pageTitle = isArabic ? "ملخص الفنيين" : "Technician Summary";
+    string createNewLabel = isArabic ? "إنشاء جديد" : "Create New";
+    string runSettlementLabel = isArabic ? "تشغيل تسوية نهاية اليوم" : "Run End of Day Settlement";
+
+    string technicianIdLabel = isArabic ? "معرف الفني" : "Technician ID";
+    string technicianNameLabel = isArabic ? "اسم الفني" : "Technician Name";
+    string totalFromReservationsLabel = isArabic ? "الإجمالي من الحجوزات" : "Total From Reservations";
+    string totalFromInsuranceLabel = isArabic ? "الإجمالي من التأمين" : "Total From Insurance";
+    string totalDebtShareLabel = isArabic ? "حصة الدين الكلية" : "Total Debt Share";
+    string totalExpensesLabel = isArabic ? "الإجمالي للمصاريف" : "Total Expenses";
+    string netPayableLabel = isArabic ? "الصافي المستحق" : "Net Payable";
+    string settlementDateLabel = isArabic ? "تاريخ التسوية" : "Settlement Date";
+    string editLabel = isArabic ? "تعديل" : "Edit";
+    string detailsLabel = isArabic ? "تفاصيل" : "Details";
+    string deleteLabel = isArabic ? "حذف" : "Delete";
 }
 
-<h1>TechnicianSummary</h1>
+<div class="container mt-4" dir="@(isArabic ? "rtl" : "ltr")">
+    <h1 class="mb-4 @(isArabic ? "text-end" : "text-start")">@pageTitle</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+    <p>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> @createNewLabel
+        </a>
+    </p>
 
-<!-- ✅ Form for POSTing the settlement list -->
-<form asp-action="TechniciansSettlement" method="post">
-    @Html.AntiForgeryToken()
-    <button type="submit" class="btn btn-primary">Run End of Day Settlement</button>
+    <form asp-action="TechniciansSettlement" method="post">
+        @Html.AntiForgeryToken()
 
-    <br />
-    <br />
+        <button type="submit" class="btn btn-success mb-3">
+            <i class="bi bi-check-circle-fill"></i> @runSettlementLabel
+        </button>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>@Html.DisplayNameFor(model => model.TechnicianId)</th>
-                <th>@Html.DisplayNameFor(model => model.TechnicianName)</th>
-                <th>@Html.DisplayNameFor(model => model.TotalFromReservations)</th>
-                <th>@Html.DisplayNameFor(model => model.TotalFromInsurance)</th>
-                <th>@Html.DisplayNameFor(model => model.TotalDebtShare)</th>
-                <th>@Html.DisplayNameFor(model => model.TotalExpenses)</th>
-                <th>@Html.DisplayNameFor(model => model.NetPayable)</th>
-                <th>@Html.DisplayNameFor(model => model.SettelmentDate)</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @for (int i = 0; i < settlements.Count; i++)
-            {
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
                 <tr>
-                    <td>
-                        @Html.DisplayFor(_ => settlements[i].TechnicianId)
-                        <input type="hidden" name="Settlements[@i].TechnicianId" value="@settlements[i].TechnicianId" />
-
-                    </td>
-                    <td>
-                        @Html.DisplayFor(_ => settlements[i].TechnicianName)
-                        <input type="hidden" name="Settlements[@i].TechnicianName" value="@settlements[i].TechnicianName" />
-                    </td>
-                    <td>
-                        @Html.DisplayFor(_ => settlements[i].TotalFromReservations)
-                        <input type="hidden" name="Settlements[@i].TotalFromReservations" value="@settlements[i].TotalFromReservations" />
-                    </td>
-                    <td>
-                        @Html.DisplayFor(_ => settlements[i].TotalFromInsurance)
-                        <input type="hidden" name="Settlements[@i].TotalFromInsurance" value="@settlements[i].TotalFromInsurance" />
-                    </td>
-                    <td>
-                        @Html.DisplayFor(_ => settlements[i].TotalDebtShare)
-                        <input type="hidden" name="Settlements[@i].TotalDebtShare" value="@settlements[i].TotalDebtShare" />
-                    </td>
-                    <td>
-                        @Html.DisplayFor(_ => settlements[i].TotalExpenses)
-                        <input type="hidden" name="Settlements[@i].TotalExpenses" value="@settlements[i].TotalExpenses" />
-                    </td>
-                    <td>
-                        @Html.DisplayFor(_ => settlements[i].NetPayable)
-                        <input type="hidden" name="Settlements[@i].NetPayable" value="@settlements[i].NetPayable" />
-                    </td>
-                    <td>
-                        @Html.DisplayFor(_ => settlements[i].SettelmentDate)
-                        <input type="hidden" name="Settlements[@i].SettelmentDate" value="@settlements[i].SettelmentDate.ToString("yyyy-MM-ddTHH:mm:ss")" />
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@settlements[i].Id">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@settlements[i].Id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@settlements[i].Id">Delete</a>
-                    </td>
+                    <th>@technicianIdLabel</th>
+                    <th>@technicianNameLabel</th>
+                    <th>@totalFromReservationsLabel</th>
+                    <th>@totalFromInsuranceLabel</th>
+                    <th>@totalDebtShareLabel</th>
+                    <th>@totalExpensesLabel</th>
+                    <th>@netPayableLabel</th>
+                    <th>@settlementDateLabel</th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
-    </table>
-</form>
-
-@* @model IEnumerable<radio_waves.Models.TechnicianSettlement>
-
-@{
-    ViewData["Title"] = "TechnicianSummary";
-}
-
-<h1>TechnicianSummary</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-
-<p>
-    <a class="btn btn-primary" asp-action="TechniciansSettlement">Run End of Day Settlement</a>
-</p>
-<br />
-<br />
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.TechnicianName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TotalFromReservations)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TotalFromInsurance)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TotalDebtShare)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TotalExpenses)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NetPayable)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SettelmentDate)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.TechnicianName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalFromReservations)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalFromInsurance)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalDebtShare)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalExpenses)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NetPayable)
-            </td>
-            <td>
-                    @Html.DisplayFor(modelItem => item.SettelmentDate)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
- *@
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Count(); i++)
+                {
+                    var item = Model.ElementAt(i);
+                    <tr>
+                        <td>
+                            @item.TechnicianId
+                            <input type="hidden" name="Settlements[@i].TechnicianId" value="@item.TechnicianId" />
+                        </td>
+                        <td>
+                            @item.TechnicianName
+                            <input type="hidden" name="Settlements[@i].TechnicianName" value="@item.TechnicianName" />
+                        </td>
+                        <td>
+                            @item.TotalFromReservations
+                            <input type="hidden" name="Settlements[@i].TotalFromReservations" value="@item.TotalFromReservations" />
+                        </td>
+                        <td>
+                            @item.TotalFromInsurance
+                            <input type="hidden" name="Settlements[@i].TotalFromInsurance" value="@item.TotalFromInsurance" />
+                        </td>
+                        <td>
+                            @item.TotalDebtShare
+                            <input type="hidden" name="Settlements[@i].TotalDebtShare" value="@item.TotalDebtShare" />
+                        </td>
+                        <td>
+                            @item.TotalExpenses
+                            <input type="hidden" name="Settlements[@i].TotalExpenses" value="@item.TotalExpenses" />
+                        </td>
+                        <td>
+                            @item.NetPayable
+                            <input type="hidden" name="Settlements[@i].NetPayable" value="@item.NetPayable" />
+                        </td>
+                        <td>
+                            @item.SettelmentDate.ToString("yyyy-MM-dd")
+                            <input type="hidden" name="Settlements[@i].SettelmentDate" value="@item.SettelmentDate.ToString("yyyy-MM-dd")" />
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">@editLabel</a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info">@detailsLabel</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">@deleteLabel</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </form>
+</div>

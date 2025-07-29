@@ -1,46 +1,59 @@
 ﻿@model radio_waves.Models.RadiologyType
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Radiology Type";
+
+    var culture = System.Globalization.CultureInfo.CurrentCulture.Name;
+    var isArabic = culture.StartsWith("ar");
+
+    string pageTitle = isArabic ? "تعديل نوع الأشعة" : "Edit Radiology Type";
+    string nameLabel = isArabic ? "الاسم" : "Name";
+    string descriptionLabel = isArabic ? "الوصف" : "Description";
+    string priceLabel = isArabic ? "السعر" : "Price";
+    string saveLabel = isArabic ? "حفظ التعديلات" : "Save Changes";
+    string backLabel = isArabic ? "العودة للقائمة" : "Back to List";
 }
 
-<h1>Edit</h1>
+<div class="container mt-4">
+    <h1 class="mb-4">@pageTitle</h1>
 
-<h4>RadiologyType</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            @* <div class="form-group">
-                <label asp-for="Id" class="control-label"></label>
-                <input asp-for="Id" class="form-control" />
-                <span asp-validation-for="Id" class="text-danger"></span>
-            </div> *@
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+    <div class="row">
+        <div class="col-md-6">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                @* Hidden Id field (needed for model binding) *@
+                <input type="hidden" asp-for="Id" />
+
+                <div class="form-group mb-3">
+                    <label asp-for="Name" class="form-label">@nameLabel</label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Description" class="form-label">@descriptionLabel</label>
+                    <input asp-for="Description" class="form-control" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-4">
+                    <label asp-for="Price" class="form-label">@priceLabel</label>
+                    <input asp-for="Price" class="form-control" />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3 text-center">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check2-circle"></i> @saveLabel
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary ms-2">
+                        <i class="bi bi-arrow-left"></i> @backLabel
+                    </a>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

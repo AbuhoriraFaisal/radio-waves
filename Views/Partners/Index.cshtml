@@ -1,47 +1,68 @@
 ﻿@model IEnumerable<radio_waves.Models.Partner>
 
 @{
-    ViewData["Title"] = "Index";
+    var culture = System.Globalization.CultureInfo.CurrentCulture.Name;
+    var isArabic = culture.StartsWith("ar");
+
+    ViewData["Title"] = isArabic ? "الشركاء" : "Partners";
+
+    string title = isArabic ? "قائمة الشركاء" : "Partners List";
+    string createNew = isArabic ? "إضافة شريك" : "Create New";
+    string nameHeader = isArabic ? "اسم الشريك" : "Partner Name";
+    string commentHeader = isArabic ? "ملاحظات" : "Comment";
+    string activeHeader = isArabic ? "نشط؟" : "Active";
+    string editText = isArabic ? "تعديل" : "Edit";
+    string detailsText = isArabic ? "تفاصيل" : "Details";
+    string deleteText = isArabic ? "حذف" : "Delete";
 }
 
-<h1>Index</h1>
+<div class="container mt-4" dir="@(isArabic ? "rtl" : "ltr")">
+    <h1 class="mb-4 @(isArabic ? "text-end" : "text-start")">@title</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.PartnerName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Comment)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Active)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.PartnerName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Comment)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Active)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <div class="mb-3">
+        <a asp-action="Create" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> @createNew
+        </a>
+    </div>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-light">
+            <tr>
+                <th>@nameHeader</th>
+                <th>@commentHeader</th>
+                <th>@activeHeader</th>
+                <th class="text-center">@(!isArabic ? "Actions" : "الخيارات")</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.PartnerName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Comment)</td>
+                    <td>
+                        @if (item.Active)
+                        {
+                            <span class="badge bg-success">@("✓")</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">@("✗")</span>
+                        }
+                    </td>
+                    <td class="text-center">
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary me-1">
+                            <i class="bi bi-pencil-square"></i> @editText
+                        </a>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info text-white me-1">
+                            <i class="bi bi-info-circle"></i> @detailsText
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">
+                            <i class="bi bi-trash"></i> @deleteText
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

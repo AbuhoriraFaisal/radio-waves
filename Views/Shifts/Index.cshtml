@@ -1,64 +1,64 @@
 ﻿@model IEnumerable<radio_waves.Models.Shift>
 
 @{
-    ViewData["Title"] = "Index";
+    var culture = System.Globalization.CultureInfo.CurrentCulture.Name;
+    var isArabic = culture.StartsWith("ar");
+
+    ViewData["Title"] = isArabic ? "قائمة الورديات" : "Shift List";
+
+    string heading = isArabic ? "قائمة الورديات" : "Shift Schedule";
+    string createLabel = isArabic ? "إضافة وردية" : "Create New Shift";
+
+    string nameLabel = isArabic ? "اسم الوردية" : "Shift Name";
+    string startTimeLabel = isArabic ? "وقت البدء" : "Start Time";
+    string endTimeLabel = isArabic ? "وقت الانتهاء" : "End Time";
+    string percentageLabel = isArabic ? "نسبة الفني" : "Technician %";
+    string specialLabel = isArabic ? "وردية خاصة؟" : "Special Shift?";
+    string editLabel = isArabic ? "تعديل" : "Edit";
+    string deleteLabel = isArabic ? "حذف" : "Delete";
 }
 
-<h1>Index</h1>
+<div class="container mt-4" dir="@(isArabic ? "rtl" : "ltr")">
+    <h1 class="mb-4 @(isArabic ? "text-end" : "text-start")">@heading</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            @* <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th> *@
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StartTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EndTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TechnicianPercentage)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsSpecial)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            @* <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td> *@
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StartTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TechnicianPercentage)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsSpecial)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <p class="mb-3 @(isArabic ? "text-end" : "text-start")">
+        <a asp-action="Create" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> @createLabel
+        </a>
+    </p>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead class="table-light">
+                <tr class="text-center">
+                    <th>@nameLabel</th>
+                    <th>@startTimeLabel</th>
+                    <th>@endTimeLabel</th>
+                    <th>@percentageLabel</th>
+                    <th>@specialLabel</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="text-center align-middle">
+                        <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                        <td>@Html.DisplayFor(modelItem => item.StartTime)</td>
+                        <td>@Html.DisplayFor(modelItem => item.EndTime)</td>
+                        <td>@Html.DisplayFor(modelItem => item.TechnicianPercentage)</td>
+                        <td>@Html.DisplayFor(modelItem => item.IsSpecial)</td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary me-1">
+                                <i class="bi bi-pencil-square"></i> @editLabel
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">
+                                <i class="bi bi-trash"></i> @deleteLabel
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

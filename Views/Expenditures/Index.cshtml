@@ -1,53 +1,79 @@
 ﻿@model IEnumerable<radio_waves.Models.Expenditure>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Expenditures";
+
+    var culture = System.Globalization.CultureInfo.CurrentCulture.Name;
+    var isArabic = culture.StartsWith("ar");
+
+    string title = isArabic ? "المصروفات" : "Expenditures";
+    string categoryLabel = isArabic ? "الفئة" : "Category";
+    string amountLabel = isArabic ? "المبلغ" : "Amount";
+    string sealedLabel = isArabic ? "مختوم؟" : "Is Sealed";
+    string typeLabel = isArabic ? "نوع الأشعة" : "Radiology Type";
+    string actionLabel = isArabic ? "الإجراء" : "Action";
+    string createLabel = isArabic ? "إنشاء مصروف جديد" : "Create New";
+    string noTypeLabel = isArabic ? "--" : "--";
 }
 
-<h1>Index</h1>
+<div class="container mt-4">
+    <h1 class="mb-3">@title</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Amount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsSealed)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RadiologyType)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Amount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsSealed)
-            </td>
-            <td>
-                    @(item.RadiologyType != null ? item.RadiologyType.Name : "--")
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <p >
+        <a asp-action="Create" class="btn btn-primary">@createLabel</a>
+    </p>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-light text-center">
+            <tr>
+                <th>@categoryLabel</th>
+                <th>@amountLabel</th>
+                <th>@sealedLabel</th>
+                <th>@typeLabel</th>
+                <th>@actionLabel</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="5" class="text-center text-muted">
+                        @(isArabic ? "لا توجد مصروفات" : "No expenditures found")
+                    </td>
+                </tr>
+            }
+            else
+            {
+                foreach (var item in Model)
+                {
+                    <tr class="text-center align-middle">
+                        <td>@item.Category</td>
+                        <td>@item.Amount</td>
+                        <td>
+                            @if (item.IsSealed)
+                            {
+                                <span class="text-success">✅</span>
+                            }
+                            else
+                            {
+                                <span class="text-danger">❌</span>
+                            }
+                        </td>
+                        <td>@(item.RadiologyType != null ? item.RadiologyType.Name : noTypeLabel)</td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning me-1">
+                                @(isArabic ? "تعديل" : "Edit")
+                            </a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info me-1">
+                                @(isArabic ? "تفاصيل" : "Details")
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">
+                                @(isArabic ? "حذف" : "Delete")
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

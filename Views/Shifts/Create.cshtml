@@ -1,58 +1,77 @@
 ﻿@model radio_waves.Models.Shift
 
 @{
-    ViewData["Title"] = "Create";
+    var culture = System.Globalization.CultureInfo.CurrentCulture.Name;
+    var isArabic = culture.StartsWith("ar");
+
+    ViewData["Title"] = isArabic ? "إضافة وردية" : "Create Shift";
+
+    string pageTitle = isArabic ? "إضافة وردية جديدة" : "Add New Shift";
+    string backToList = isArabic ? "العودة إلى القائمة" : "Back to List";
+    string submitLabel = isArabic ? "حفظ" : "Save";
+
+    string nameLabel = isArabic ? "اسم الوردية" : "Shift Name";
+    string startTimeLabel = isArabic ? "وقت البدء" : "Start Time";
+    string endTimeLabel = isArabic ? "وقت الانتهاء" : "End Time";
+    string percentageLabel = isArabic ? "نسبة الفني" : "Technician Percentage";
+    string isSpecialLabel = isArabic ? "هل هي وردية خاصة؟" : "Is Special Shift?";
 }
 
-<h1>Create</h1>
+<div class="container mt-4" dir="@(isArabic ? "rtl" : "ltr")">
+    <h1 class="mb-4 @(isArabic ? "text-end" : "text-start")">@pageTitle</h1>
 
-<h4>Shift</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            @* <div class="form-group">
-                <label asp-for="Id" class="control-label"></label>
-                <input asp-for="Id" class="form-control" />
-                <span asp-validation-for="Id" class="text-danger"></span>
-            </div> *@
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Name" class="form-label">@nameLabel</label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="StartTime" class="form-label">@startTimeLabel</label>
+                    <input asp-for="StartTime" class="form-control" />
+                    <span asp-validation-for="StartTime" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="EndTime" class="form-label">@endTimeLabel</label>
+                    <input asp-for="EndTime" class="form-control" />
+                    <span asp-validation-for="EndTime" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="TechnicianPercentage" class="form-label">@percentageLabel</label>
+                    <input asp-for="TechnicianPercentage" class="form-control" />
+                    <span asp-validation-for="TechnicianPercentage" class="text-danger"></span>
+                </div>
+
+                <div class="form-check mb-3">
+                    <input class="form-check-input" asp-for="IsSpecial" id="IsSpecial" />
+                    <label class="form-check-label" for="IsSpecial">@isSpecialLabel</label>
+                </div>
+
+                <div class="form-group mb-3">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save"></i> @submitLabel
+                    </button>
+                </div>
+            </form>
+
+            <div class="mt-3">
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> @backToList
+                </a>
             </div>
-            <div class="form-group">
-                <label asp-for="StartTime" class="control-label"></label>
-                <input asp-for="StartTime" class="form-control" />
-                <span asp-validation-for="StartTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EndTime" class="control-label"></label>
-                <input asp-for="EndTime" class="form-control" />
-                <span asp-validation-for="EndTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TechnicianPercentage" class="control-label"></label>
-                <input asp-for="TechnicianPercentage" class="form-control" />
-                <span asp-validation-for="TechnicianPercentage" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsSpecial" /> @Html.DisplayNameFor(model => model.IsSpecial)
-                </label>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

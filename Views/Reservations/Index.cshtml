@@ -1,147 +1,113 @@
 ﻿@model IEnumerable<radio_waves.Models.Reservation>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Reservations";
+
+    var currentCulture = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
+    bool isArabic = currentCulture.StartsWith("ar", StringComparison.OrdinalIgnoreCase);
+
+    string pageTitle = isArabic ? "الحجوزات" : "Reservations";
+    string searchPlaceholder = isArabic ? "بحث باسم المريض أو الفني" : "Search by patient or technician name";
+    string fromDateLabel = isArabic ? "من تاريخ" : "From Date";
+    string toDateLabel = isArabic ? "إلى تاريخ" : "To Date";
+    string createNewLabel = isArabic ? "حجز جديد" : "Create New";
+    string filterLabel = isArabic ? "تصفية" : "Filter";
+    string printLabel = isArabic ? "طباعة PDF" : "Print PDF";
+
+    string[] headers = isArabic
+        ? new[] { "المريض", "التاريخ", "نوع الأشعة", "الفني", "السعر الأساسي", "المبلغ المدفوع", "مدفوع", "ملغى", "الخيارات" }
+        : new[] { "Patient", "Date", "Type", "Technician", "Base Price", "Paid Amount", "Paid?", "Canceled?", "Actions" };
 }
 
-<h1>Index</h1>
+<h1 class="mb-4">@pageTitle</h1>
 
-<p>
-</p>
 <form asp-action="Index" method="get" class="mb-3">
-    <div class="form-inline">
-        <input type="text" name="searchString" value="@Context.Request.Query["searchString"]" class="form-control mr-2" placeholder="Search by patient name or by technician name" />
+    <div class="row g-2 align-items-end">
 
-        <input type="date" name="fromDate" value="@Context.Request.Query["fromDate"]" class="form-control mr-2" />
-        <input type="date" name="toDate" value="@Context.Request.Query["toDate"]" class="form-control mr-2" />
+        <div class="col-md-3">
+            <input type="text" name="searchString" value="@Context.Request.Query["searchString"]"
+                   class="form-control" placeholder="@searchPlaceholder" />
+        </div>
 
-        <br />
-        <a asp-action="Create" class="btn btn-primary mr-2">Create New</a>
+        <div class="col-md-2">
+            <label class="form-label">@fromDateLabel</label>
+            <input type="date" name="fromDate" value="@Context.Request.Query["fromDate"]" class="form-control" />
+        </div>
 
-        <button type="submit" class="btn btn-success">Filter</button>
+        <div class="col-md-2">
+            <label class="form-label">@toDateLabel</label>
+            <input type="date" name="toDate" value="@Context.Request.Query["toDate"]" class="form-control" />
+        </div>
 
-        <a class="btn btn-secondary ml-2"
-           asp-action="Print"
-           asp-route-searchString="@Context.Request.Query["searchString"]"
-           asp-route-fromDate="@Context.Request.Query["fromDate"]"
-           asp-route-toDate="@Context.Request.Query["toDate"]">
-            Print PDF
-        </a>
+        <div class="col-md-auto">
+            <a asp-action="Create" class="btn btn-primary">@createNewLabel</a>
+        </div>
+
+        <div class="col-md-auto">
+            <button type="submit" class="btn btn-success">@filterLabel</button>
+        </div>
+
+        <div class="col-md-auto">
+            <a class="btn btn-secondary"
+               asp-action="Print"
+               asp-route-searchString="@Context.Request.Query["searchString"]"
+               asp-route-fromDate="@Context.Request.Query["fromDate"]"
+               asp-route-toDate="@Context.Request.Query["toDate"]">
+                @printLabel
+            </a>
+        </div>
     </div>
 </form>
 
-
-<table class="table">
-    <thead>
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
         <tr>
-           @*  <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th> *@
-            <th>
-                @Html.DisplayNameFor(model => model.Patient.FullName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AppointmentDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RadiologyType.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Technician.FullName)
-            </th>
-           @*  <th>
-                @Html.DisplayNameFor(model => model.Shift.Name)
-            </th> *@
-            <th>
-                @Html.DisplayNameFor(model => model.BasePrice)
-            </th>
-            @* <th>
-                @Html.DisplayNameFor(model => model.IsDebt)
-            </th> *@
-            @* <th>
-                @Html.DisplayNameFor(model => model.IsCommission)
-            </th> *@
-            <th>
-                @Html.DisplayNameFor(model => model.PaiedAmount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsPaid)
-            </th>
-            @* <th>
-                @Html.DisplayNameFor(model => model.IsSealed)
-            </th> *@
-            <th>
-                @Html.DisplayNameFor(model => model.IsCanceled)
-            </th>
-           @*  <th>
-                @Html.DisplayNameFor(model => model.CoveredByInsurance)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.InsuranceId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TechnicianShare)
-            </th> *@
-            <th></th>
+            @foreach (var header in headers)
+            {
+                <th>@header</th>
+            }
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            @* <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td> *@
-            <td>
-                @Html.DisplayFor(modelItem => item.Patient.FullName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AppointmentDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RadiologyType.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Technician.FullName)
-            </td>
-            @* <td>
-                @Html.DisplayFor(modelItem => item.ShiftId)
-            </td> *@
-            <td>
-                @Html.DisplayFor(modelItem => item.BasePrice)
-            </td>
-            @* <td>
-                @Html.DisplayFor(modelItem => item.IsDebt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsCommission)
-            </td> *@
-            <td>
-                @Html.DisplayFor(modelItem => item.PaiedAmount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsPaid)
-            </td>
-            @* <td>
-                @Html.DisplayFor(modelItem => item.IsSealed)
-            </td> *@
-            <td>
-                @Html.DisplayFor(modelItem => item.IsCanceled)
-            </td>
-            @* <td>
-                @Html.DisplayFor(modelItem => item.CoveredByInsurance)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.InsuranceId)
-            </td> *@
-           @*  <td>
-                @Html.DisplayFor(modelItem => item.TechnicianShare)
-            </td> *@
-            <td>
-                @* @Html.ActionLink("Edit", "Edit", new { id=item.Id }) | *@
-                @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-                    @Html.ActionLink("Cancel", "Delete", new { id = item.Id })
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            var rowClass = item.IsCanceled ? "table-danger" : "";
+            <tr class="@rowClass">
+                <td>@item.Patient.FullName</td>
+                <td>@item.AppointmentDate.ToString("yyyy-MM-dd")</td>
+                <td>@item.RadiologyType.Name</td>
+                <td>@item.Technician.FullName</td>
+                <td>@item.BasePrice.ToString("C")</td>
+                <td>@item.PaiedAmount.ToString("C")</td>
+                <td>
+                    @if (item.IsPaid)
+                    {
+                        <span class="text-success fw-bold">@(isArabic ? "نعم" : "Yes") ✅</span>
+                    }
+                    else
+                    {
+                        <span class="text-danger fw-bold">@(isArabic ? "لا" : "No") ❌</span>
+                    }
+                </td>
+                <td>
+                    @if (item.IsCanceled)
+                    {
+                        <span class="text-danger fw-bold">@(isArabic ? "نعم" : "Yes") ❌</span>
+                    }
+                    else
+                    {
+                        <span class="text-success fw-bold">@(isArabic ? "لا" : "No") ✅</span>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info me-1">
+                        @(isArabic ? "تفاصيل" : "Details")
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">
+                        @(isArabic ? "إلغاء" : "Cancel")
+                    </a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

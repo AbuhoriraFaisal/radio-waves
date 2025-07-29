@@ -4,104 +4,87 @@
     ViewData["Title"] = "Index";
 
     var filterValue = Context.Request.Query["filter"].ToString();
+    var culture = System.Globalization.CultureInfo.CurrentCulture.Name;
+    var isArabic = culture.StartsWith("ar");
+
+    string title = isArabic ? "قائمة التأمينات" : "Insurance List";
+    string createLabel = isArabic ? "إضافة جديد" : "Create New";
+    string filterLabel = isArabic ? "بحث بالاسم أو الشركة" : "Search by patient or Insurance Company Name";
+    string filterButton = isArabic ? "بحث" : "Filter";
+    string printButton = isArabic ? "طباعة PDF" : "Print PDF";
+    string completeLabel = isArabic ? "إتمام" : "Complete";
+    string noDataText = isArabic ? "لا توجد نتائج" : "No records found";
 }
 
-<h1>Index</h1>
-<form asp-action="Index" method="get" class="form-inline mb-3">
-    <div class="form-group mr-2">
-        <input type="text"
-               name="filter"
-               class="form-control"
-               placeholder="Search by patient or Insurance Company Name"
-               value="@filterValue" />
-    </div>
-    <br />
-    <a asp-action="Create" class="btn btn-primary mr-2">Create New</a>
-    <button type="submit" class="btn btn-success">Filter</button>
+<div class="container mt-4" >
+    <h1 class="mb-3">@title</h1>
 
-    <a asp-action="DownloadInsuranceReport"
-       asp-route-filter="@filterValue"
-       class="btn btn-secondary ml-2">
-        Print PDF
-    </a>
+    <form asp-action="Index" method="get" class="mb-4 row g-2 align-items-center">
+        <div class="col-sm-4">
+            <input type="text"
+                   name="filter"
+                   class="form-control"
+                   placeholder="@filterLabel"
+                   value="@filterValue" />
+        </div>
 
-</form>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Company.Provider)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PatientId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ReservationId)
-            </th>
-            @* <th>
-                @Html.DisplayNameFor(model => model.TechnicianId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TechnicianShare)
-            </th> *@
-            <th>
-                @Html.DisplayNameFor(model => model.PaidAmount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.InsuranceAmount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PolicyNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsComplete)
-            </th>
-           @*  <th>
-                @Html.DisplayNameFor(model => model.IsTechnicianShared)
-            </th> *@
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                    @Html.DisplayFor(modelItem => item.Company.Provider)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Patient.FullName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReservationId)
-            </td>
-           @*  <td>
-                @Html.DisplayFor(modelItem => item.TechnicianId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TechnicianShare)
-            </td> *@
-            <td>
-                @Html.DisplayFor(modelItem => item.PaidAmount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.InsuranceAmount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PolicyNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsComplete)
-            </td>
-           @*  <td>
-                @Html.DisplayFor(modelItem => item.IsTechnicianShared)
-            </td> *@
-            <td>
-                @* <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> | *@
-                    @* <a asp-action="MarkAsTechnicianShared" asp-route-id="@item.Id">Technician Shared</a> | *@
-                    <a asp-action="MarkAsComplete" asp-route-id="@item.Id">Complete</a>
+        @* <div class="col-auto">
+            <a asp-action="Create" class="btn btn-primary">@createLabel</a>
+        </div> *@
 
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-success">@filterButton</button>
+        </div>
+
+        <div class="col-auto">
+            <a asp-action="DownloadInsuranceReport"
+               asp-route-filter="@filterValue"
+               class="btn btn-secondary">
+                @printButton
+            </a>
+        </div>
+    </form>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-light">
+            <tr class="text-center">
+                <th>@(isArabic ? "مقدم الخدمة" : "Provider")</th>
+                <th>@(isArabic ? "اسم المريض" : "Patient Name")</th>
+                <th>@(isArabic ? "رقم الحجز" : "Reservation")</th>
+                <th>@(isArabic ? "المبلغ المدفوع" : "Paid Amount")</th>
+                <th>@(isArabic ? "مبلغ التأمين" : "Insurance Amount")</th>
+                <th>@(isArabic ? "رقم البوليصة" : "Policy Number")</th>
+                <th>@(isArabic ? "مكتمل؟" : "Is Complete")</th>
+                <th>@(isArabic ? "الإجراءات" : "Actions")</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="8" class="text-center text-muted">@noDataText</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var item in Model)
+                {
+                    <tr class="text-center align-middle">
+                        <td>@item.Company.Provider</td>
+                        <td>@item.Patient.FullName</td>
+                        <td>@item.ReservationId</td>
+                        <td>@item.PaidAmount</td>
+                        <td>@item.InsuranceAmount</td>
+                        <td>@item.PolicyNumber</td>
+                        <td>@(item.IsComplete ? (isArabic ? "نعم" : "Yes") : (isArabic ? "لا" : "No"))</td>
+                        <td>
+                            <a asp-action="MarkAsComplete" asp-route-id="@item.Id" class="btn btn-outline-success btn-sm">
+                                @completeLabel
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

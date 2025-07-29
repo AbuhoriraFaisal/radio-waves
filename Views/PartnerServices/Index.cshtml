@@ -1,47 +1,56 @@
 ﻿@model IEnumerable<radio_waves.Models.PartnerServices>
 
 @{
-    ViewData["Title"] = "Index";
+    var culture = System.Globalization.CultureInfo.CurrentCulture.Name;
+    var isArabic = culture.StartsWith("ar");
+
+    ViewData["Title"] = isArabic ? "الخدمات الشريكة" : "Partner Services";
+
+    string partnerLabel = isArabic ? "الشريك" : "Partner";
+    string serviceLabel = isArabic ? "الخدمة" : "Service";
+    string percentageLabel = isArabic ? "النسبة المئوية" : "Amount Percentage";
+    string createNewLabel = isArabic ? "إنشاء جديد" : "Create New";
+    string actionsLabel = isArabic ? "الإجراءات" : "Actions";
 }
 
-<h1>Index</h1>
+<div class="container mt-4" dir="@(isArabic ? "rtl" : "ltr")">
+    <h1 class="mb-4 @(isArabic ? "text-end" : "text-start")">@ViewData["Title"]</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Partner)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Service)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Amount_Percentage)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Partner.PartnerName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Service.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Amount_Percentage)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <p>
+        <a asp-action="Create" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> @createNewLabel
+        </a>
+    </p>
+
+    <table class="table table-striped table-bordered">
+        <thead class="table-light">
+            <tr>
+                <th>@partnerLabel</th>
+                <th>@serviceLabel</th>
+                <th>@percentageLabel</th>
+                <th>@actionsLabel</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(m => item.Partner.PartnerName)</td>
+                    <td>@Html.DisplayFor(m => item.Service.Name)</td>
+                    <td>@Html.DisplayFor(m => item.Amount_Percentage)</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary me-1">
+                            <i class="bi bi-pencil-square"></i> @(isArabic ? "تعديل" : "Edit")
+                        </a>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info me-1">
+                            <i class="bi bi-info-circle"></i> @(isArabic ? "تفاصيل" : "Details")
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">
+                            <i class="bi bi-trash"></i> @(isArabic ? "حذف" : "Delete")
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
