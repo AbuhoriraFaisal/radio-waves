@@ -14,14 +14,14 @@
     string deleteText = isArabic ? "حذف" : "Delete";
 }
 
-<div class="container mt-4" dir="@(isArabic ? "rtl" : "ltr")">
-    <h1 class="mb-4 @(isArabic ? "text-end" : "text-start")">@title</h1>
+<div class="container mt-4">
+    <h1 class="mb-4 ">@title</h1>
 
-    <p class="@(isArabic ? "text-end" : "text-start")">
+    <div class="mb-3">
         <a asp-action="Create" class="btn btn-success">
             <i class="bi bi-person-plus-fill"></i> @createBtn
         </a>
-    </p>
+    </div>
 
     <table class="table table-bordered table-striped">
         <thead class="table-light">

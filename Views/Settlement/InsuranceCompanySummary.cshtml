@@ -17,8 +17,8 @@
     string settleLabel = isArabic ? "تسوية" : "Settle";
 }
 
-<div class="container mt-4" dir="@(isArabic ? "rtl" : "ltr")">
-    <h1 class="mb-4 @(isArabic ? "text-end" : "text-start")">@pageTitle</h1>
+<div class="container mt-4">
+    <h1 class="mb-4">@pageTitle</h1>
 
     <p class="mb-3">
         <a asp-action="Create" class="btn btn-primary">

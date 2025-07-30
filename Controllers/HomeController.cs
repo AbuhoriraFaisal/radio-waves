@@ -16,18 +16,21 @@ namespace radio_waves.Controllers
             _logger = logger;
         }
 
-        public IActionResult SetLanguage(string culture, string returnUrl = null)
+        [AllowAnonymous]
+        public IActionResult SetLanguage(string culture)
         {
-            Response.Cookies.Append(
-               CookieRequestCultureProvider.DefaultCookieName,
-               CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
-               new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
-           );
+            if (!string.IsNullOrWhiteSpace(culture))
+            {
+                Response.Cookies.Append(
+                    CookieRequestCultureProvider.DefaultCookieName,
+                    CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
+                    new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
+                );
+            }
 
-            return Redirect(Request.Headers["Referer"].ToString());
+            var referer = Request.Headers["Referer"].ToString();
+            return string.IsNullOrWhiteSpace(referer) ? RedirectToAction("Index", "Home") : Redirect(referer);
         }
-
-
 
         public IActionResult Index()
         {

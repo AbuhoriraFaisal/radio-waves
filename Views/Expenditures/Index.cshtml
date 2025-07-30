@@ -64,9 +64,9 @@
                             <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning me-1">
                                 @(isArabic ? "تعديل" : "Edit")
                             </a>
-                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info me-1">
+                            @* <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info me-1">
                                 @(isArabic ? "تفاصيل" : "Details")
-                            </a>
+                            </a> *@
                             <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">
                                 @(isArabic ? "حذف" : "Delete")
                             </a>

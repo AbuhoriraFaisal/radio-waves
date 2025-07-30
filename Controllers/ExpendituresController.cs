@@ -101,7 +101,7 @@ namespace radio_waves.Controllers
             {
                 return NotFound();
             }
-            ViewData["RadiologyTypeId"] = new SelectList(_context.RadiologyTypes, "Id", "Id", expenditure.RadiologyTypeId);
+            ViewData["RadiologyTypeId"] = new SelectList(_context.RadiologyTypes, "Id", "Name", expenditure.RadiologyTypeId);
             return View(expenditure);
         }
 
@@ -142,28 +142,28 @@ namespace radio_waves.Controllers
         }
 
         // GET: Expenditures/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> Delete(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var expenditure = await _context.Expenditures
-                .Include(e => e.RadiologyType)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (expenditure == null)
-            {
-                return NotFound();
-            }
+        //    var expenditure = await _context.Expenditures
+        //        .Include(e => e.RadiologyType)
+        //        .FirstOrDefaultAsync(m => m.Id == id);
+        //    if (expenditure == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(expenditure);
-        }
+        //    return View(expenditure);
+        //}
 
         // POST: Expenditures/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
         {
             var expenditure = await _context.Expenditures.FindAsync(id);
             if (expenditure != null)

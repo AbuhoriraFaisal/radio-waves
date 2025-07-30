@@ -1,108 +1,86 @@
 ﻿@model radio_waves.Models.Reservation
 
 @{
-    ViewData["Title"] = "Details";
+    var currentCulture = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
+    bool isArabic = currentCulture.StartsWith("ar", StringComparison.OrdinalIgnoreCase);
+    string dir = isArabic ? "rtl" : "ltr";
+    string align = isArabic ? "text-end" : "text-start";
+
+    ViewData["Title"] = isArabic ? "تفاصيل الحجز" : "Reservation Details";
+
+    string pageTitle = isArabic ? "تفاصيل الحجز" : "Reservation Details";
+    string backToList = isArabic ? "العودة للقائمة" : "Back to List";
+    string editLabel = isArabic ? "تعديل" : "Edit";
+
+    string[] labels = isArabic
+        ? new[] {
+            "المريض", "تاريخ الحجز", "نوع الأشعة", "الفني", "الوردية",
+            "السعر الأساسي", "المبلغ المدفوع", "خاتم؟", "ملغي؟",
+            "دين؟", "عمولة؟", "مغطى بالتأمين؟", "نسبة الفني"
+                }
+        : new[] {
+            "Patient", "Appointment Date", "Radiology Type", "Technician", "Shift",
+            "Base Price", "Paid Amount", "Is Sealed", "Is Canceled",
+            "Is Debt", "Is Commission", "Covered by Insurance", "Technician Share"
+                };
 }
 
-<h1>Details</h1>
+<div class="container mt-5">
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <h2 class="mb-4 text-primary">
+                <i class="bi bi-clipboard2-data me-2"></i> @pageTitle
+            </h2>
 
-<div>
-    <h4>Reservation</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Patient)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Patient.FullName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AppointmentDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AppointmentDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RadiologyType)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RadiologyType.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Technician)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Technician.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Shift)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Shift.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.BasePrice)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.BasePrice)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PaiedAmount)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PaiedAmount)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsSealed)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsSealed)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsCanceled)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsCanceled)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsDebt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsDebt)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsCommission)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsCommission)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CoveredByInsurance)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CoveredByInsurance)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsTechnicianShared)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsTechnicianShared)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.InsuranceId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.InsuranceId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TechnicianShare)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TechnicianShare)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+            <dl class="row ">
+                <dt class="col-sm-4">@labels[0]</dt>
+                <dd class="col-sm-8">@Model.Patient?.FullName</dd>
+
+                <dt class="col-sm-4">@labels[1]</dt>
+                <dd class="col-sm-8">@Model.AppointmentDate.ToString("yyyy-MM-dd")</dd>
+
+                <dt class="col-sm-4">@labels[2]</dt>
+                <dd class="col-sm-8">@Model.RadiologyType?.Name</dd>
+
+                <dt class="col-sm-4">@labels[3]</dt>
+                <dd class="col-sm-8">@Model.Technician?.FullName</dd>
+
+                <dt class="col-sm-4">@labels[4]</dt>
+                <dd class="col-sm-8">@Model.Shift?.Name</dd>
+
+                <dt class="col-sm-4">@labels[5]</dt>
+                <dd class="col-sm-8">@Model.BasePrice.ToString("C")</dd>
+
+                <dt class="col-sm-4">@labels[6]</dt>
+                <dd class="col-sm-8">@Model.PaiedAmount.ToString("C")</dd>
+
+                <dt class="col-sm-4">@labels[7]</dt>
+                <dd class="col-sm-8">@((Model.IsSealed) ? (isArabic ? "نعم" : "Yes") : (isArabic ? "لا" : "No"))</dd>
+
+                <dt class="col-sm-4">@labels[8]</dt>
+                <dd class="col-sm-8">@((Model.IsCanceled) ? (isArabic ? "نعم" : "Yes") : (isArabic ? "لا" : "No"))</dd>
+
+                <dt class="col-sm-4">@labels[9]</dt>
+                <dd class="col-sm-8">@((Model.IsDebt) ? (isArabic ? "نعم" : "Yes") : (isArabic ? "لا" : "No"))</dd>
+
+                <dt class="col-sm-4">@labels[10]</dt>
+                <dd class="col-sm-8">@((Model.IsCommission) ? (isArabic ? "نعم" : "Yes") : (isArabic ? "لا" : "No"))</dd>
+
+                <dt class="col-sm-4">@labels[11]</dt>
+                <dd class="col-sm-8">@((Model.CoveredByInsurance) ? (isArabic ? "نعم" : "Yes") : (isArabic ? "لا" : "No"))</dd>
+
+                <dt class="col-sm-4">@labels[12]</dt>
+                <dd class="col-sm-8">@Model.TechnicianShare.ToString("C")</dd>
+            </dl>
+
+            <div class="mt-4 ">
+                <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary me-2">
+                    <i class="bi bi-pencil-square"></i> @editLabel
+                </a>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> @backToList
+                </a>
+            </div>
+        </div>
+    </div>
 </div>

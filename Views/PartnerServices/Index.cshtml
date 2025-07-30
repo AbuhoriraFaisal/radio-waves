@@ -13,8 +13,8 @@
     string actionsLabel = isArabic ? "الإجراءات" : "Actions";
 }
 
-<div class="container mt-4" dir="@(isArabic ? "rtl" : "ltr")">
-    <h1 class="mb-4 @(isArabic ? "text-end" : "text-start")">@ViewData["Title"]</h1>
+<div class="container mt-4">
+    <h1 class="mb-4">@ViewData["Title"]</h1>
 
     <p>
         <a asp-action="Create" class="btn btn-success">
@@ -42,9 +42,9 @@
                         <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary me-1">
                             <i class="bi bi-pencil-square"></i> @(isArabic ? "تعديل" : "Edit")
                         </a>
-                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info me-1">
+                        @* <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info me-1">
                             <i class="bi bi-info-circle"></i> @(isArabic ? "تفاصيل" : "Details")
-                        </a>
+                        </a> *@
                         <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">
                             <i class="bi bi-trash"></i> @(isArabic ? "حذف" : "Delete")
                         </a>

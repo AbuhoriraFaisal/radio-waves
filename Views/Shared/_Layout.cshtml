@@ -1,8 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@* @using Microsoft.AspNetCore.Mvc.Localization *@
 @inject UserManager<IdentityUser> UserManager
 @inject SignInManager<IdentityUser> SignInManager
-@* @inject IViewLocalizer Localizer *@
 @{
     var currentCulture = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
     bool isArabic = currentCulture.StartsWith("ar", StringComparison.OrdinalIgnoreCase);
@@ -12,130 +10,171 @@
 <html lang="@currentCulture" dir="@(isArabic ? "rtl" : "ltr")">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - radio_waves</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - Bio Link Laboratories</title>
 
     @if (isArabic)
     {
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet" />
     }
     else
     {
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+        <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
     }
+    <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/radio_waves.styles.css" rel="stylesheet" asp-append-version="true" />
 
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/radio_waves.styles.css" asp-append-version="true" />
+    <style>
+        /* Subtle custom tweaks */
+        body {
+            background-color: #f8f9fa;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .navbar-brand {
+            font-weight: 600;
+            font-size: 1.5rem;
+            color: #007bff;
+        }
+
+        .nav-link {
+            font-weight: 500;
+            font-size: 1rem;
+        }
+
+        footer {
+            font-size: 0.9rem;
+            color: #6c757d;
+            background-color: #fff;
+        }
+    </style>
 </head>
-
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom shadow-sm mb-4">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">radio_waves</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
-                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    Bio Link
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain"
+                        aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <div class="collapse navbar-collapse" id="navbarMain">
                     <ul class="navbar-nav flex-grow-1">
-
                         @if (SignInManager.IsSignedIn(User))
                         {
-                            @* Admin-only *@
-                            @if (User.IsInRole("Admin"))
-                            {
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle text-dark" href="#" id="settlementDropdown" role="button" data-bs-toggle="dropdown">
-                                        @(isArabic ? "التسويات" : "Settlements")
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" asp-controller="Settlement" asp-action="InsuranceCompanySummary" >@(isArabic ? "ملخص شركات التأمين" : "Insurance Company Summary")</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Settlement" asp-action="insuranceCompanysettlement" >@(isArabic ? "تسويات شركات التأمين" : "Insurance Company Settlements")</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Settlement" asp-action="TechnicianSummary" >@(isArabic ? "ملخص الفنيين" : "Technician Summary")</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Settlement" asp-action="TechniciansSettlement" >@(isArabic ? "تسويات الفنيين" : "Technicians Settlements")</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Settlement" asp-action="PartnerSummary" >@(isArabic ? "ملخص الشركاء" : "Partner Summary")</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Settlement" asp-action="PartnersSettlement" >@(isArabic ? "تسويات الشركاء" : "Partners Settlements")</a></li>
-                                    </ul>
-                                </li>
-
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle text-dark" href="#" id="configDropdown" role="button" data-bs-toggle="dropdown">
-                                        @(isArabic ? "الإعدادات" : "Configurations")
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" asp-controller="RadiologyTypes" asp-action="Create">@(isArabic ? "إضافة خدمة" : "Add Service")</a></li>
-                                        <li><a class="dropdown-item" asp-controller="RadiologyTypes" asp-action="Index">@(isArabic ? "الخدمات" : "Services")</a></li>
-                                        <li><a class="dropdown-item" asp-controller="InsuranceCompanies" asp-action="Create">@(isArabic ? "إضافة شركة تأمين" : "Add Insurance Company")</a></li>
-                                        <li><a class="dropdown-item" asp-controller="InsuranceCompanies" asp-action="Index">@(isArabic ? "شركات التأمين" : "Insurance Companies")</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Patients" asp-action="Create">@(isArabic ? "إضافة مريض" : "Add Patient")</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Patients" asp-action="Index">@(isArabic ? "المرضى" : "Patients")</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Partners" asp-action="Create">@(isArabic ? "إضافة شريك" : "Add Partner")</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Partners" asp-action="Index">@(isArabic ? "الشركاء" : "Partners")</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Technicians" asp-action="Create">@(isArabic ? "إضافة فني" : "Add Technician")</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Technicians" asp-action="Index">@(isArabic ? "الفنيين" : "Technicians")</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Shifts" asp-action="Create">@(isArabic ? "إضافة مناوبة" : "Add Shift")</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Shifts" asp-action="Index">@(isArabic ? "المناوبات" : "Shifts")</a></li>
-                                    </ul>
-                                </li>
-                            }
 
                             @* Shared for Admin and Receptionist *@
                             @if (User.IsInRole("Receptionist") || User.IsInRole("Admin"))
                             {
                                 <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle text-dark" href="#" id="reservationsDropdown" role="button" data-bs-toggle="dropdown">
+                                    <a class="nav-link dropdown-toggle text-dark" href="#" id="reservationsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         @(isArabic ? "الحجوزات" : "Reservations")
                                     </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" asp-controller="Reservations" asp-action="Create" >@(isArabic ? "إضافة حجز" : "Add Reservation")</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Reservations" asp-action="Index" >@(isArabic ? "الحجوزات" : "Reservations")</a></li>
+                                    <ul class="dropdown-menu" aria-labelledby="reservationsDropdown">
+                                        <li><a class="dropdown-item" asp-controller="Reservations" asp-action="Create">@((isArabic) ? "إضافة حجز" : "Add Reservation")</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Reservations" asp-action="Index">@((isArabic) ? "الحجوزات" : "Reservations")</a></li>
                                     </ul>
                                 </li>
 
                                 <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle text-dark" href="#" id="transactionsDropdown" role="button" data-bs-toggle="dropdown">
+                                    <a class="nav-link dropdown-toggle text-dark" href="#" id="transactionsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         @(isArabic ? "المعاملات" : "Transactions")
                                     </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" asp-controller="Insurances" asp-action="Index">@(isArabic ? "شركات التأمين" : "Insurances")</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Debts" asp-action="Index">@(isArabic ? "الديون" : "Debts")</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Expenditures" asp-action="Index">@(isArabic ? "المصروفات" : "Expenditures")</a></li>
+                                    <ul class="dropdown-menu" aria-labelledby="transactionsDropdown">
+                                        <li><a class="dropdown-item" asp-controller="Insurances" asp-action="Index">@((isArabic) ? "دفعيات شركات التأمين" : "Insurances Companies Payments")</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Debts" asp-action="Index">@((isArabic) ? "الديون" : "Debts")</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Expenditures" asp-action="Index">@((isArabic) ? "المصروفات" : "Expenditures")</a></li>
                                     </ul>
                                 </li>
                             }
+                            @* Admin-only menus *@
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle text-dark" href="#" id="settlementDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        @(isArabic ? "التسويات" : "Settlements")
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="settlementDropdown">
+                                        <li><a class="dropdown-item" asp-controller="Settlement" asp-action="InsuranceCompanySummary">@((isArabic) ? "ملخص شركات التأمين" : "Insurance Company Summary")</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Settlement" asp-action="insuranceCompanysettlement">@((isArabic) ? "تسويات شركات التأمين" : "Insurance Company Settlements")</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Settlement" asp-action="TechnicianSummary">@((isArabic) ? "ملخص الفنيين" : "Technician Summary")</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Settlement" asp-action="TechniciansSettlement">@((isArabic) ? "تسويات الفنيين" : "Technicians Settlements")</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Settlement" asp-action="PartnerSummary">@((isArabic) ? "ملخص الشركاء" : "Partner Summary")</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Settlement" asp-action="PartnersSettlement">@((isArabic) ? "تسويات الشركاء" : "Partners Settlements")</a></li>
+                                    </ul>
+                                </li>
+
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle text-dark" href="#" id="configDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        @(isArabic ? "الإعدادات" : "Configurations")
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="configDropdown">
+                                        <li><a class="dropdown-item" asp-controller="RadiologyTypes" asp-action="Create">@((isArabic) ? "إضافة خدمة" : "Add Service")</a></li>
+                                        <li><a class="dropdown-item" asp-controller="RadiologyTypes" asp-action="Index">@((isArabic) ? "الخدمات" : "Services")</a></li>
+                                        <li><a class="dropdown-item" asp-controller="InsuranceCompanies" asp-action="Create">@((isArabic) ? "إضافة شركة تأمين" : "Add Insurance Company")</a></li>
+                                        <li><a class="dropdown-item" asp-controller="InsuranceCompanies" asp-action="Index">@((isArabic) ? "شركات التأمين" : "Insurance Companies")</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Patients" asp-action="Create">@((isArabic) ? "إضافة مريض" : "Add Patient")</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Patients" asp-action="Index">@((isArabic) ? "المرضى" : "Patients")</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Partners" asp-action="Create">@((isArabic) ? "إضافة شريك" : "Add Partner")</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Partners" asp-action="Index">@((isArabic) ? "الشركاء" : "Partners")</a></li>
+                                        <li><a class="dropdown-item" asp-controller="PartnerServices" asp-action="Create">@((isArabic) ? "إضافة خدمة لشريك" : "Add Service to Partner")</a></li>
+                                        <li><a class="dropdown-item" asp-controller="PartnerServices" asp-action="Index">@((isArabic) ? "خدمات الشركاء" : "Partners Services")</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Technicians" asp-action="Create">@((isArabic) ? "إضافة فني" : "Add Technician")</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Technicians" asp-action="Index">@((isArabic) ? "الفنيين" : "Technicians")</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Shifts" asp-action="Create">@((isArabic) ? "إضافة مناوبة" : "Add Shift")</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Shifts" asp-action="Index">@((isArabic) ? "المناوبات" : "Shifts")</a></li>
+                                    </ul>
+                                </li>
+                            }
+
                         }
                     </ul>
 
-                    <ul class="navbar-nav">
+                    <ul class="navbar-nav align-items-center">
                         @if (SignInManager.IsSignedIn(User))
                         {
-                            <li class="nav-item">
+                            <li class="nav-item me-3">
                                 <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
-                                    <button type="submit" class="nav-link btn btn-link">
-                                        @(isArabic ? "تسجيل الخروج" : "Logout")
+                                    <button type="submit" class="btn btn-link nav-link p-0 m-0" title="@(isArabic ? "تسجيل الخروج" : "Logout")">
+                                        <i class="bi bi-box-arrow-right"></i> @(isArabic ? "تسجيل الخروج" : "Logout")
                                     </button>
                                 </form>
                             </li>
                         }
                         else
                         {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Account" asp-action="Login" >
-                                    @(isArabic ? "تسجيل الدخول" : "Login")
+                            <li class="nav-item me-3">
+                                <a class="nav-link" asp-controller="Account" asp-action="Login" title="@(isArabic ? "تسجيل الدخول" : "Login")">
+                                    <i class="bi bi-box-arrow-in-right"></i> @(isArabic ? "تسجيل الدخول" : "Login")
                                 </a>
                             </li>
                         }
 
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-dark" href="#" id="langDropdown" role="button" data-bs-toggle="dropdown">
-                                @(isArabic ? "اللغة" : "Language")
+                        @* <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" id="langDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-translate me-1"></i> @(isArabic ? "اللغة" : "Language")
                             </a>
-                            <ul class="dropdown-menu">
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
                                 <li><a class="dropdown-item" asp-controller="Home" asp-action="SetLanguage" asp-route-culture="ar">العربية</a></li>
                                 <li><a class="dropdown-item" asp-controller="Home" asp-action="SetLanguage" asp-route-culture="en">English</a></li>
                             </ul>
+                        </li> *@
+                        <li class="nav-item">
+                            @if (isArabic)
+                            {
+                                <a class="nav-link" asp-controller="Home" asp-action="SetLanguage" asp-route-culture="en" title="Switch to English">
+                                    🇬🇧 English
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="nav-link" asp-controller="Home" asp-action="SetLanguage" asp-route-culture="ar" title="التبديل إلى العربية">
+                                    🇸🇦 العربية
+                                </a>
+                            }
                         </li>
                     </ul>
                 </div>
@@ -143,16 +182,16 @@
         </nav>
     </header>
 
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+    <main class="container-fluid px-3">
+        <partial name="_StatusMessage" />
+        @RenderBody()
+    </main>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - radio_waves - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
+    <footer class="border-top text-center text-muted py-3 mt-5 bg-white">
+        &copy; 2023 - Bio Link Laboratory Management System |
+        <a asp-controller="Home" asp-action="Privacy" class="text-decoration-none text-muted">
+            @(isArabic ? "سياسة الخصوصية" : "Privacy Policy")
+        </a>
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

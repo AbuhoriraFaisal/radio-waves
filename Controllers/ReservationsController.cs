@@ -88,6 +88,7 @@ namespace radio_waves.Controllers
         {
             var reservations = await _context.Reservations.Include(r => r.RadiologyType)
                 .Include(r => r.Patient)
+                .Include(r => r.Shift)
                 .Include(r => r.Technician).FirstOrDefaultAsync(r => r.Id==id); // Assuming you want to show details of a specific reservation
             return View(reservations);
         }

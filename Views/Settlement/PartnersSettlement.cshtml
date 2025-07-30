@@ -16,8 +16,8 @@
     string deleteLabel = isArabic ? "حذف" : "Delete";
 }
 
-<div class="container mt-4" dir="@(isArabic ? "rtl" : "ltr")">
-    <h1 class="mb-4 @(isArabic ? "text-end" : "text-start")">@pageTitle</h1>
+<div class="container mt-4">
+    <h1 class="mb-4 ">@pageTitle</h1>
 
     <p class="mb-3">
         <a asp-action="Create" class="btn btn-primary">
@@ -31,7 +31,7 @@
                 <th>@partnerNameLabel</th>
                 <th>@amountLabel</th>
                 <th>@settlementDateLabel</th>
-                <th></th>
+                @* <th></th> *@
             </tr>
         </thead>
         <tbody>
@@ -41,11 +41,11 @@
                     <td>@Html.DisplayFor(modelItem => item.PartnerName)</td>
                     <td>@Html.DisplayFor(modelItem => item.Amount)</td>
                     <td>@Html.DisplayFor(modelItem => item.SettlementDate)</td>
-                    <td class="d-flex gap-2">
+                    @* <td class="d-flex gap-2">
                         <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">@editLabel</a>
                         <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info">@detailsLabel</a>
                         <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">@deleteLabel</a>
-                    </td>
+                    </td> *@
                 </tr>
             }
         </tbody>

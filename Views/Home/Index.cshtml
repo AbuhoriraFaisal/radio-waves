@@ -1,8 +1,35 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    var culture = System.Globalization.CultureInfo.CurrentCulture.Name;
+    var isArabic = culture.StartsWith("ar");
+
+    string welcomeTitle = isArabic ? "مرحباً بك في النظام" : "Welcome to the System";
+
+    string description = isArabic
+        ? "هذا النظام مخصص لإدارة الحجوزات والإجراءات الإشعاعية بكل سهولة وأمان."
+        : "This system is designed to manage reservations and radiology procedures efficiently and securely.";
+
+    string additionalDetails = isArabic
+        ? "يغطي النظام عمليات مختبرات التصوير الطبي والفحوصات السريرية، مع متابعة دقيقة للمرضى، وتحليل نتائج الفحوصات، وضمان جودة عالية في تقديم الخدمات الطبية."
+        : "The system covers medical imaging laboratories and clinical examinations, providing precise patient tracking, test result analysis, and ensuring high-quality delivery of medical services.";
+
+    string direction = isArabic ? "rtl" : "ltr";
+    string textAlign = isArabic ? "text-end" : "text-start";
+    string iconSpacing = isArabic ? "ms-2" : "me-2";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-5">
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <h1 class="display-4 mb-4 text-primary">
+                <i class="bi bi-speedometer2 @iconSpacing"></i> @welcomeTitle
+            </h1>
+            <p class="lead  text-secondary mb-3" style="font-size:1.25rem;">
+                @description
+            </p>
+            <p class="lead text-secondary mb-0" style="font-size:1.1rem;">
+                @additionalDetails
+            </p>
+        </div>
+    </div>
 </div>
