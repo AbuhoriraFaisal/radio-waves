@@ -188,10 +188,10 @@
     </main>
 
     <footer class="border-top text-center text-muted py-3 mt-5 bg-white">
-        &copy; 2023 - Bio Link Laboratory Management System |
-        <a asp-controller="Home" asp-action="Privacy" class="text-decoration-none text-muted">
+        @DateTime.Now.Year - Bio Link Laboratory Management System | Provalues
+        @* <a asp-controller="Home" asp-action="Privacy" class="text-decoration-none text-muted">
             @(isArabic ? "سياسة الخصوصية" : "Privacy Policy")
-        </a>
+        </a> *@
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
