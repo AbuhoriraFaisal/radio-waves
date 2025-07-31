@@ -55,7 +55,7 @@
                 <th>@(isArabic ? "مبلغ التأمين" : "Insurance Amount")</th>
                 <th>@(isArabic ? "رقم البوليصة" : "Policy Number")</th>
                 <th>@(isArabic ? "مكتمل؟" : "Is Complete")</th>
-                <th>@(isArabic ? "الإجراءات" : "Actions")</th>
+                @* <th>@(isArabic ? "الإجراءات" : "Actions")</th> *@
             </tr>
         </thead>
         <tbody>
@@ -77,11 +77,11 @@
                         <td>@item.InsuranceAmount</td>
                         <td>@item.PolicyNumber</td>
                         <td>@(item.IsComplete ? (isArabic ? "نعم" : "Yes") : (isArabic ? "لا" : "No"))</td>
-                        <td>
+                        @* <td>
                             <a asp-action="MarkAsComplete" asp-route-id="@item.Id" class="btn btn-outline-success btn-sm">
                                 @completeLabel
                             </a>
-                        </td>
+                        </td> *@
                     </tr>
                 }
             }

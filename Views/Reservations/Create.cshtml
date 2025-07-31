@@ -137,7 +137,9 @@
             const paid = parseFloat(totalPriceInput.value) || 0;
             const shiftId = document.getElementById("ShiftId").value;
             const shift = shifts.find(s => s.id == shiftId);
-            technicianShareInput.value = shift ? (paid * (shift.technicianPercentage / 100)).toFixed(2) : "";
+            technicianShareInput.value = shift
+                ? Math.round(paid * (shift.technicianPercentage / 100))
+                : "";
         }
 
         function updateDebtAndCommissionState() {
@@ -149,8 +151,8 @@
         document.getElementById("RadiologyTypeId").addEventListener("change", function () {
             const selected = radiologyTypes.find(r => r.id == this.value);
             if (selected) {
-                basePriceInput.value = selected.price;
-                totalPriceInput.value = selected.price;
+                basePriceInput.value = Math.round(selected.price);
+                totalPriceInput.value = Math.round(selected.price);
                 updateTechnicianShare();
             } else {
                 basePriceInput.value = "";
@@ -168,17 +170,18 @@
             if (!show) {
                 insuranceSelect.value = "";
                 totalPriceInput.value = basePriceInput.value;
+                // Do not update technician share here to preserve original logic
             }
             updateDebtAndCommissionState();
-            updateTechnicianShare();
         });
 
         insuranceSelect.addEventListener("change", function () {
             const selected = insurances.find(i => i.id == this.value);
             const basePrice = parseFloat(basePriceInput.value) || 0;
             totalPriceInput.value = selected
-                ? (basePrice - (basePrice * selected.coveragedPercentage / 100)).toFixed(2)
-                : basePrice.toFixed(2);
+                ? Math.round(basePrice - (basePrice * selected.coveragedPercentage / 100))
+                : Math.round(basePrice);
+            // Do NOT update technician share here — preserve original behavior
             updateDebtAndCommissionState();
         });
 
@@ -191,3 +194,7 @@
         });
     </script>
 }
+
+
+
+

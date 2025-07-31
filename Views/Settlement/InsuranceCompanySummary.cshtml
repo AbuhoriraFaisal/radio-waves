@@ -47,7 +47,7 @@
                     <td>@Html.DisplayFor(modelItem => item.NetPayable)</td>
                     <td>@Html.DisplayFor(modelItem => item.SettlementDate)</td>
                     <td class="d-flex gap-2">
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">@editLabel</a>
+                        @* <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">@editLabel</a> *@
 
                         <form asp-action="MarkAsComplete" method="post" class="d-inline">
                             @Html.AntiForgeryToken()
